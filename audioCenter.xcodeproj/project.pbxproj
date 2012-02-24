@@ -1,0 +1,282 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F321FA8314F808920021E3BC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F321FA8214F808920021E3BC /* UIKit.framework */; };
+		F321FA8514F808920021E3BC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F321FA8414F808920021E3BC /* Foundation.framework */; };
+		F321FA8714F808920021E3BC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F321FA8614F808920021E3BC /* CoreGraphics.framework */; };
+		F321FA8D14F808920021E3BC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F321FA8B14F808920021E3BC /* InfoPlist.strings */; };
+		F321FA8F14F808920021E3BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F321FA8E14F808920021E3BC /* main.m */; };
+		F321FA9314F808920021E3BC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F321FA9214F808920021E3BC /* AppDelegate.m */; };
+		F321FA9614F808920021E3BC /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F321FA9414F808920021E3BC /* MainStoryboard.storyboard */; };
+		F321FA9914F808920021E3BC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F321FA9814F808920021E3BC /* ViewController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F321FA7E14F808920021E3BC /* audioCenter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = audioCenter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F321FA8214F808920021E3BC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		F321FA8414F808920021E3BC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		F321FA8614F808920021E3BC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		F321FA8A14F808920021E3BC /* audioCenter-Info.plist */ = {isa = PBXFileReference; path = "audioCenter-Info.plist"; sourceTree = "<group>"; };
+		F321FA8C14F808920021E3BC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		F321FA8E14F808920021E3BC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		F321FA9014F808920021E3BC /* audioCenter-Prefix.pch */ = {isa = PBXFileReference; path = "audioCenter-Prefix.pch"; sourceTree = "<group>"; };
+		F321FA9114F808920021E3BC /* AppDelegate.h */ = {isa = PBXFileReference; path = AppDelegate.h; sourceTree = "<group>"; };
+		F321FA9214F808920021E3BC /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		F321FA9514F808920021E3BC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		F321FA9714F808920021E3BC /* ViewController.h */ = {isa = PBXFileReference; path = ViewController.h; sourceTree = "<group>"; };
+		F321FA9814F808920021E3BC /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F321FA7B14F808920021E3BC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F321FA8314F808920021E3BC /* UIKit.framework in Frameworks */,
+				F321FA8514F808920021E3BC /* Foundation.framework in Frameworks */,
+				F321FA8714F808920021E3BC /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F321FA7314F808920021E3BC = {
+			isa = PBXGroup;
+			children = (
+				F321FA8814F808920021E3BC /* audioCenter */,
+				F321FA8114F808920021E3BC /* Frameworks */,
+				F321FA7F14F808920021E3BC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F321FA7F14F808920021E3BC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F321FA7E14F808920021E3BC /* audioCenter.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F321FA8114F808920021E3BC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F321FA8214F808920021E3BC /* UIKit.framework */,
+				F321FA8414F808920021E3BC /* Foundation.framework */,
+				F321FA8614F808920021E3BC /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F321FA8814F808920021E3BC /* audioCenter */ = {
+			isa = PBXGroup;
+			children = (
+				F321FA9114F808920021E3BC /* AppDelegate.h */,
+				F321FA9214F808920021E3BC /* AppDelegate.m */,
+				F321FA9414F808920021E3BC /* MainStoryboard.storyboard */,
+				F321FA9714F808920021E3BC /* ViewController.h */,
+				F321FA9814F808920021E3BC /* ViewController.m */,
+				F321FA8914F808920021E3BC /* Supporting Files */,
+			);
+			path = audioCenter;
+			sourceTree = "<group>";
+		};
+		F321FA8914F808920021E3BC /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F321FA8A14F808920021E3BC /* audioCenter-Info.plist */,
+				F321FA8B14F808920021E3BC /* InfoPlist.strings */,
+				F321FA8E14F808920021E3BC /* main.m */,
+				F321FA9014F808920021E3BC /* audioCenter-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F321FA7D14F808920021E3BC /* audioCenter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F321FA9C14F808920021E3BC /* Build configuration list for PBXNativeTarget "audioCenter" */;
+			buildPhases = (
+				F321FA7A14F808920021E3BC /* Sources */,
+				F321FA7B14F808920021E3BC /* Frameworks */,
+				F321FA7C14F808920021E3BC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = audioCenter;
+			productName = audioCenter;
+			productReference = F321FA7E14F808920021E3BC /* audioCenter.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F321FA7514F808920021E3BC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = Gizbo.ru;
+			};
+			buildConfigurationList = F321FA7814F808920021E3BC /* Build configuration list for PBXProject "audioCenter" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = F321FA7314F808920021E3BC;
+			productRefGroup = F321FA7F14F808920021E3BC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F321FA7D14F808920021E3BC /* audioCenter */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F321FA7C14F808920021E3BC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F321FA8D14F808920021E3BC /* InfoPlist.strings in Resources */,
+				F321FA9614F808920021E3BC /* MainStoryboard.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F321FA7A14F808920021E3BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F321FA8F14F808920021E3BC /* main.m in Sources */,
+				F321FA9314F808920021E3BC /* AppDelegate.m in Sources */,
+				F321FA9914F808920021E3BC /* ViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		F321FA8B14F808920021E3BC /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F321FA8C14F808920021E3BC /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		F321FA9414F808920021E3BC /* MainStoryboard.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F321FA9514F808920021E3BC /* en */,
+			);
+			name = MainStoryboard.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F321FA9A14F808920021E3BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		F321FA9B14F808920021E3BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F321FA9D14F808920021E3BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "audioCenter/audioCenter-Prefix.pch";
+				INFOPLIST_FILE = "audioCenter/audioCenter-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		F321FA9E14F808920021E3BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "audioCenter/audioCenter-Prefix.pch";
+				INFOPLIST_FILE = "audioCenter/audioCenter-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F321FA7814F808920021E3BC /* Build configuration list for PBXProject "audioCenter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F321FA9A14F808920021E3BC /* Debug */,
+				F321FA9B14F808920021E3BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F321FA9C14F808920021E3BC /* Build configuration list for PBXNativeTarget "audioCenter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F321FA9D14F808920021E3BC /* Debug */,
+				F321FA9E14F808920021E3BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F321FA7514F808920021E3BC /* Project object */;
+}
