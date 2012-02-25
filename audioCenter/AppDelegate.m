@@ -2,19 +2,20 @@
 //  AppDelegate.m
 //  audioCenter
 //
-//  Created by Сергей Паршуков on 2/24/12.
-//  Copyright (c) 2012 Gizbo.ru. All rights reserved.
+//  Created by Sergey Parshukov on 24.02.2012.
+//  Copyright (c) 2012 Sergey Parshukov. All rights reserved.
 //
 
 #import "AppDelegate.h"
+#import <AVFoundation/AVAudioSession.h>
 
 @implementation AppDelegate
 
 @synthesize window = _window;
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    // Override point for customization after application launch.
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
     return YES;
 }
 							

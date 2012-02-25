@@ -1,5 +1,5 @@
 //
-//  AppDelegate.h
+//  ViewController.h
 //  audioCenter
 //
 //  Created by Sergey Parshukov on 24.02.2012.
@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LastFmAPI.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
-
-@property (strong, nonatomic) UIWindow *window;
+@interface RadioViewController : UIViewController
 
 @end
