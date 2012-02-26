@@ -115,10 +115,42 @@
         <scene sceneID="m7o-fy-1k8">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eDo-4y-FDN" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="nQ6-zE-nsv" sceneMemberID="viewController">
+                <viewController id="nQ6-zE-nsv" customClass="RadiostationListViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RIJ-Ts-457">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Yaj-r5-gbY">
+                                <rect key="frame" x="20" y="86" width="280" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="http://ultradarkradio.com:3026/">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="selectRadiostation:" destination="nQ6-zE-nsv" eventType="touchUpInside" id="Siq-5h-auF"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="qKT-tT-1nt">
+                                <rect key="frame" x="20" y="131" width="280" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="http://205.188.215.231:8000/">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="selectRadiostation:" destination="nQ6-zE-nsv" eventType="touchUpInside" id="BOt-2V-3Fn"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="aW8-Nn-JIs"/>
@@ -141,6 +173,12 @@
                 <relationship kind="outlet" name="trackImage" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="trackTitle" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="username" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="RadiostationListViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RadiostationListViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="selectRadiostation:"/>
             </relationships>
         </class>
     </classes>

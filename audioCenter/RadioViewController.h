@@ -11,4 +11,7 @@
 
 @interface RadioViewController : UIViewController
 
+- (void)play;
+- (void)pause;
+
 @end

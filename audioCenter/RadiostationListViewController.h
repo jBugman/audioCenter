@@ -1,0 +1,21 @@
+//
+//  RadiostationListViewController.h
+//  audioCenter
+//
+//  Created by Sergey Parshukov on 26.02.2012.
+//  Copyright (c) 2012 Sergey Parshukov. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@protocol RadiostationListDelegate
+
+- (void)setRadiostation:(NSString*)stationUrl;
+
+@end
+
+@interface RadiostationListViewController : UIViewController
+
+@property (weak, nonatomic) id<RadiostationListDelegate> delegate;
+
+@end

@@ -11,12 +11,13 @@
 #import <AVFoundation/AVPlayer.h>
 #import <AVFoundation/AVPlayerItem.h>
 #import "NormalizedTrackTitle.h"
+#import "RadiostationListViewController.h"
 
 
 #define TIMED_METADATA @"timedMetadata"
 
 
-@interface RadioViewController()
+@interface RadioViewController() <RadiostationListDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *trackArtist;
 @property (weak, nonatomic) IBOutlet UILabel *trackTitle;
@@ -39,6 +40,7 @@
 
 
 @implementation RadioViewController
+
 @synthesize playPauseButton = _playPauseButton;
 @synthesize trackImage = _trackImage;
 
@@ -52,14 +54,34 @@
     [super viewDidLoad];
     
     self.api = [[LastFmAPI alloc] init];
-    
-    NSURL *streamUrl = [NSURL URLWithString: @"http://ultradarkradio.com:3026/"];
-	self.radio = [[AVPlayer alloc] initWithURL: streamUrl];
-    [self.radio.currentItem addObserver:self forKeyPath:TIMED_METADATA options:NSKeyValueObservingOptionNew context:NULL];
+	[self setRadiostation:@"http://ultradarkradio.com:3026/"];
+	[self pause];
 }
 
+- (void)setRadiostation:(NSString*)stationUrl {
+	[self.radio pause];
+	[self.radio.currentItem removeObserver:self forKeyPath:TIMED_METADATA];
+	self.radio = nil;
+	self.trackArtist.text = @"";
+	self.trackTitle.text = @"";
+	self.trackImage.image = nil;
+	
+	NSURL *streamUrl = [NSURL URLWithString:stationUrl];
+	self.radio = [[AVPlayer alloc] initWithURL: streamUrl];
+    [self.radio.currentItem addObserver:self forKeyPath:TIMED_METADATA options:NSKeyValueObservingOptionNew context:NULL];
+	
+	[self play];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+	if([segue.identifier isEqualToString:@"ShowRadiostations"]) {
+		RadiostationListViewController *destinationController = segue.destinationViewController;
+		destinationController.delegate = self;
+	}
+}
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	NSLog(@"[!] OBSERVE");
     if([keyPath isEqualToString:TIMED_METADATA]) { // Получили обновленную метадату — значит играет новый трек или это первый запуск
         AVPlayerItem *playerItem = object;
         NSArray *metadata = playerItem.timedMetadata;
@@ -76,7 +98,6 @@
         self.trackTitle.text = normalizedTitle.trackName;
         if(normalizedTitle.isFilled) {
             [self.api getInfoForTrack:normalizedTitle.trackName artist:normalizedTitle.artist completionHandler:^(NSDictionary *trackInfo, NSError *error) {
-                NSLog(@"trackInfo: %@", trackInfo);
                 NSString *albumImageUrl = [self getImageUrlWithTrackInfo:trackInfo];
                 if(albumImageUrl != nil) {
                     NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:albumImageUrl]];
@@ -122,17 +143,23 @@
     return [[images lastObject] valueForKey:@"#text"];
 }
 
+- (void)pause {
+	[self.radio pause];
+	[self.playPauseButton setImage:[UIImage imageNamed:@"playIcon.png"] forState:UIControlStateNormal];
+	self.isPlaying = NO;
+}
+
+- (void)play {
+	[self.radio play];
+	[self.playPauseButton setImage:[UIImage imageNamed:@"pauseIcon.png"] forState:UIControlStateNormal];
+	self.isPlaying = YES;
+}
+
 - (IBAction)playPauseTap:(UIButton*)sender {
-    if(!self.isPlaying){
-        [self.radio play];
-		[sender setImage:[UIImage imageNamed:@"pauseIcon.png"] forState:UIControlStateNormal];
-//        [sender setTitle:@"Pause" forState:UIControlStateNormal];
-        self.isPlaying = YES;
+    if(!self.isPlaying) {
+        [self pause];
     } else {
-        [self.radio pause];
-		[sender setImage:[UIImage imageNamed:@"playIcon.png"] forState:UIControlStateNormal];
-//        [sender setTitle:@"Play" forState:UIControlStateNormal];
-        self.isPlaying = NO;
+        [self play];
     }
 }
 

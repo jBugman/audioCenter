@@ -119,7 +119,6 @@
          requireAuth:YES
           HTTPMethod:HTTPMethodPOST 
      completionBlock:^(NSDictionary *response, NSError *error) {
-         NSLog(@"scrobble: %@", response);
          if(error && handler)
              handler(error);
      }];
@@ -134,11 +133,7 @@
     NSMutableDictionary *requestParameters = [NSMutableDictionary dictionaryWithDictionary:params];
     [requestParameters setObject:method forKey:@"method"];
 	[requestParameters setObject:API_KEY forKey:@"api_key"];
-//	[requestParameters addEntriesFromDictionary:params];
 	if(httpMethod){
-//		if(self.sk){
-//            [requestParameters setObject:self.sk forKey:@"sk"];
-//        }
 		[requestParameters setObject:[self methodSignatureWithParameters:requestParameters] forKey:@"api_sig"];
 	}
     [requestParameters setObject:@"json" forKey:@"format"];
