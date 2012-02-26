@@ -28,6 +28,7 @@
 		F374690B14FAB6B600C6D165 /* playIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = F374690914FAB6B600C6D165 /* playIcon.png */; };
 		F374690C14FAB6B600C6D165 /* playIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F374690A14FAB6B600C6D165 /* playIcon@2x.png */; };
 		F3BCFA4714FACB07001C6EFF /* RadiostationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3BCFA4614FACB07001C6EFF /* RadiostationListViewController.m */; };
+		F3BCFA4A14FAD958001C6EFF /* as.png in Resources */ = {isa = PBXBuildFile; fileRef = F3BCFA4914FAD958001C6EFF /* as.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +62,7 @@
 		F374690A14FAB6B600C6D165 /* playIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "playIcon@2x.png"; sourceTree = "<group>"; };
 		F3BCFA4514FACB07001C6EFF /* RadiostationListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadiostationListViewController.h; sourceTree = "<group>"; };
 		F3BCFA4614FACB07001C6EFF /* RadiostationListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RadiostationListViewController.m; sourceTree = "<group>"; };
+		F3BCFA4914FAD958001C6EFF /* as.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = as.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +144,7 @@
 		F37468FA14FAB1EE00C6D165 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				F3BCFA4914FAD958001C6EFF /* as.png */,
 				F37468FB14FAB1EE00C6D165 /* listIcon.png */,
 				F37468FE14FAB37E00C6D165 /* listIcon@2x.png */,
 				F37468FF14FAB37E00C6D165 /* pauseIcon.png */,
@@ -215,6 +218,7 @@
 				F374690814FAB6AE00C6D165 /* bottomBarTexture@2x.png in Resources */,
 				F374690B14FAB6B600C6D165 /* playIcon.png in Resources */,
 				F374690C14FAB6B600C6D165 /* playIcon@2x.png in Resources */,
+				F3BCFA4A14FAD958001C6EFF /* as.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

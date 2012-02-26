@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol RadiostationListDelegate
+@protocol RadiostationListDelegate <NSObject>
 
 - (void)setRadiostation:(NSString*)stationUrl;
+
+@optional
+- (void) play;
 
 @end
 

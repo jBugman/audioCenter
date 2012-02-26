@@ -36,10 +36,10 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </imageView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="jq4-w4-bbM" userLabel="Username">
-                                <rect key="frame" x="85" y="386" width="232" height="27"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.90000000000000002" contentMode="left" text="jBugman" lineBreakMode="tailTruncation" minimumFontSize="10" id="jq4-w4-bbM" userLabel="Username">
+                                <rect key="frame" x="36" y="393" width="232" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <color key="highlightedColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </label>
@@ -58,11 +58,16 @@
                                     <action selector="playPauseTap:" destination="2" eventType="touchUpInside" id="zGL-mL-U0v"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="as.png" id="w4S-wr-Pal">
+                                <rect key="frame" x="3" y="393" width="31" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.095726415940000004" green="1" blue="0.22992270249999999" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="6tH-Dc-BEq">
                         <nil key="title"/>
+                        <barButtonItem key="backBarButtonItem" title="Radio" id="qOo-yT-co7"/>
                         <connections>
                             <outlet property="leftBarButtonItem" destination="MHC-Dx-g1b" id="xaT-yc-qv0"/>
                             <outlet property="rightBarButtonItem" destination="dbp-Ie-oqZ" id="hkG-mN-OFW"/>
@@ -160,6 +165,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="as.png" width="31" height="20"/>
         <image name="bottomBarTexture.png" width="1" height="96"/>
         <image name="listIcon.png" width="22" height="13"/>
         <image name="playIcon.png" width="29" height="26"/>
@@ -178,7 +184,7 @@
         <class className="RadiostationListViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/RadiostationListViewController.h"/>
             <relationships>
-                <relationship kind="action" name="selectRadiostation:"/>
+                <relationship kind="action" name="selectRadiostation:" candidateClass="UIButton"/>
             </relationships>
         </class>
     </classes>

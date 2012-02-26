@@ -21,8 +21,10 @@
 @synthesize delegate = _delegate;
 
 - (IBAction)selectRadiostation:(UIButton*)sender {
-	NSLog(@"%@", sender.titleLabel.text);
 	[self.delegate setRadiostation:sender.titleLabel.text];
+	if([self.delegate respondsToSelector:@selector(play)]) {
+		[self.delegate play];
+	}
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -32,7 +34,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-//	self.navigationItem.backBarButtonItem.title = @"Radio";
 }
 
 - (void)viewDidUnload {

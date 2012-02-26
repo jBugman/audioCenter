@@ -12,6 +12,7 @@
 #import <AVFoundation/AVPlayerItem.h>
 #import "NormalizedTrackTitle.h"
 #import "RadiostationListViewController.h"
+#import "NSString+md5.h"
 
 
 #define TIMED_METADATA @"timedMetadata"
@@ -36,6 +37,8 @@
 - (NSString*)getImageUrlWithTrackInfo:(NSDictionary*)trackInfo;
 - (NSString*)getImageUrlWithArtistInfo:(NSDictionary*)artistInfo;
 
+- (void)loadImageWithUrl:(NSString*)imageUrl;
+
 @end
 
 
@@ -55,7 +58,13 @@
     
     self.api = [[LastFmAPI alloc] init];
 	[self setRadiostation:@"http://ultradarkradio.com:3026/"];
-	[self pause];
+	
+	NSString *cachesPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+	NSArray *files = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:cachesPath error:nil] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.jpg'"]];
+	for(NSString* fileName in files) {
+		NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[cachesPath stringByAppendingPathComponent:fileName] error:nil];
+		NSLog(@"%@ %@ %@", fileName, [attributes valueForKey:NSFileSize], [attributes valueForKey:NSFileCreationDate]);
+	}
 }
 
 - (void)setRadiostation:(NSString*)stationUrl {
@@ -69,19 +78,15 @@
 	NSURL *streamUrl = [NSURL URLWithString:stationUrl];
 	self.radio = [[AVPlayer alloc] initWithURL: streamUrl];
     [self.radio.currentItem addObserver:self forKeyPath:TIMED_METADATA options:NSKeyValueObservingOptionNew context:NULL];
-	
-	[self play];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 	if([segue.identifier isEqualToString:@"ShowRadiostations"]) {
 		RadiostationListViewController *destinationController = segue.destinationViewController;
-		destinationController.delegate = self;
-	}
+		destinationController.delegate = self;	}
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	NSLog(@"[!] OBSERVE");
     if([keyPath isEqualToString:TIMED_METADATA]) { // Получили обновленную метадату — значит играет новый трек или это первый запуск
         AVPlayerItem *playerItem = object;
         NSArray *metadata = playerItem.timedMetadata;
@@ -100,8 +105,7 @@
             [self.api getInfoForTrack:normalizedTitle.trackName artist:normalizedTitle.artist completionHandler:^(NSDictionary *trackInfo, NSError *error) {
                 NSString *albumImageUrl = [self getImageUrlWithTrackInfo:trackInfo];
                 if(albumImageUrl != nil) {
-                    NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:albumImageUrl]];
-                    self.trackImage.image = [UIImage imageWithData: imageData];
+					[self loadImageWithUrl:albumImageUrl];
                 } else {
                     [self.api getInfoForArtist:normalizedTitle.artist completionHandler:^(NSDictionary *artistInfo, NSError *error) {
 						if(error) {
@@ -109,8 +113,7 @@
 						} else {
 							NSString *artistImageUrl = [self getImageUrlWithArtistInfo:artistInfo];
 							if(artistImageUrl != nil) {
-								NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:artistImageUrl]];
-								self.trackImage.image = [UIImage imageWithData: imageData];
+								[self loadImageWithUrl:artistImageUrl];
 							} else {
 								self.trackImage.image = nil;
 							}
@@ -118,7 +121,8 @@
                     }];
                 }
             }];
-            if(self.previousTrack != nil && normalizedTitle != self.previousTrack) {
+            if(self.previousTrack != nil && normalizedTitle != self.previousTrack) {//TODO починить скробблинг при переключении \
+				станций. А вообще, надо сделать как положено, с 50% или 4 минут. Скорее всего так проще.
                 [self.api scrobbleTrack:self.previousTrack.trackName artist:self.previousTrack.artist
                               timestamp:[[NSDate date] timeIntervalSince1970]
                              sessionKey:self.sessionKey completionHandler:^(NSError *error) {
@@ -131,6 +135,20 @@
             }];
         }
     }
+}
+
+- (void)loadImageWithUrl:(NSString*)imageUrl {
+	NSString *cachesPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+	NSString *cacheFile = [cachesPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", [imageUrl md5]]];
+	if([[NSFileManager defaultManager] fileExistsAtPath:cacheFile]) {
+		NSLog(@"[i] Image cache hit");
+		self.trackImage.image = [UIImage imageWithContentsOfFile:cacheFile];
+	} else {
+		NSLog(@"[i] Image cache miss"); //TODO do it async
+		NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+		self.trackImage.image = [UIImage imageWithData: imageData];
+		[UIImageJPEGRepresentation(self.trackImage.image, 85) writeToFile:cacheFile atomically:YES];
+	}
 }
 
 - (NSString*)getImageUrlWithTrackInfo:(NSDictionary*)trackInfo {
@@ -156,7 +174,7 @@
 }
 
 - (IBAction)playPauseTap:(UIButton*)sender {
-    if(!self.isPlaying) {
+    if(self.isPlaying) {
         [self pause];
     } else {
         [self play];
