@@ -83,12 +83,17 @@
                     self.trackImage.image = [UIImage imageWithData: imageData];
                 } else {
                     [self.api getInfoForArtist:normalizedTitle.artist completionHandler:^(NSDictionary *artistInfo, NSError *error) {
-                        NSLog(@"error: %@", error);
-                        NSString *artistImageUrl = [self getImageUrlWithArtistInfo:artistInfo];
-                        if(artistImageUrl != nil) {
-                            NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:artistImageUrl]];
-                            self.trackImage.image = [UIImage imageWithData: imageData];
-                        }
+						if(error) {
+							NSLog(@"error: %@", error);
+						} else {
+							NSString *artistImageUrl = [self getImageUrlWithArtistInfo:artistInfo];
+							if(artistImageUrl != nil) {
+								NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:artistImageUrl]];
+								self.trackImage.image = [UIImage imageWithData: imageData];
+							} else {
+								self.trackImage.image = nil;
+							}
+						}
                     }];
                 }
             }];
@@ -108,16 +113,11 @@
 }
 
 - (NSString*)getImageUrlWithTrackInfo:(NSDictionary*)trackInfo {
-    NSDictionary *album = [trackInfo valueForKey:@"album"];
-    if(album) {
-        NSArray *images = [album valueForKey:@"image"];
-        return [[images lastObject] valueForKey:@"#text"];
-    }
-    return nil;
+	NSArray *images = [trackInfo valueForKeyPath:@"album.image"];
+	return [[images lastObject] valueForKey:@"#text"];
 }
 
 - (NSString*)getImageUrlWithArtistInfo:(NSDictionary*)artistInfo {
-    NSLog(@"ARTIST: %@", artistInfo);
     NSArray *images = [artistInfo valueForKey:@"image"];
     return [[images lastObject] valueForKey:@"#text"];
 }
@@ -125,11 +125,13 @@
 - (IBAction)playPauseTap:(UIButton*)sender {
     if(!self.isPlaying){
         [self.radio play];
-        [sender setTitle:@"Pause" forState:UIControlStateNormal];
+		[sender setImage:[UIImage imageNamed:@"pauseIcon.png"] forState:UIControlStateNormal];
+//        [sender setTitle:@"Pause" forState:UIControlStateNormal];
         self.isPlaying = YES;
     } else {
         [self.radio pause];
-        [sender setTitle:@"Play" forState:UIControlStateNormal];
+		[sender setImage:[UIImage imageNamed:@"playIcon.png"] forState:UIControlStateNormal];
+//        [sender setTitle:@"Play" forState:UIControlStateNormal];
         self.isPlaying = NO;
     }
 }
