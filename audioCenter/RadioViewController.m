@@ -33,6 +33,8 @@
 @property (strong, nonatomic) NSString *sessionKey;
 
 @property (strong, nonatomic) NormalizedTrackTitle *previousTrack;
+@property (assign, nonatomic) NSTimeInterval previousTrackStartTime;
+@property (assign, nonatomic) NSTimeInterval previousTrackLength;
 
 - (NSString*)getImageUrlWithTrackInfo:(NSDictionary*)trackInfo;
 - (NSString*)getImageUrlWithArtistInfo:(NSDictionary*)artistInfo;
@@ -52,6 +54,7 @@
 @synthesize api = _api;
 @synthesize sessionKey = _sessionKey;
 @synthesize previousTrack = _previousTrack;
+@synthesize previousTrackStartTime = _previousTrackStartTime, previousTrackLength = _previousTrackLength;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -61,10 +64,13 @@
 	
 	NSString *cachesPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
 	NSArray *files = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:cachesPath error:nil] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.jpg'"]];
+	long totalSize = 0;
 	for(NSString* fileName in files) {
 		NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[cachesPath stringByAppendingPathComponent:fileName] error:nil];
-		NSLog(@"%@ %@ %@", fileName, [attributes valueForKey:NSFileSize], [attributes valueForKey:NSFileCreationDate]);
+		totalSize += [((NSNumber*)[attributes valueForKey:NSFileSize]) longValue];
 	}
+	totalSize /= 1024;
+	NSLog(@"[i] Cache size: %@K", [NSNumber numberWithLong:totalSize]);
 }
 
 - (void)setRadiostation:(NSString*)stationUrl {
@@ -97,13 +103,13 @@
                 break;
             }
         }
-        NSLog(@"%@", metadataTitle);
         NormalizedTrackTitle *normalizedTitle = [NormalizedTrackTitle normalizedTrackTitleWithString:metadataTitle];
         self.trackArtist.text = normalizedTitle.artist;
         self.trackTitle.text = normalizedTitle.trackName;
         if(normalizedTitle.isFilled) {
             [self.api getInfoForTrack:normalizedTitle.trackName artist:normalizedTitle.artist completionHandler:^(NSDictionary *trackInfo, NSError *error) {
                 NSString *albumImageUrl = [self getImageUrlWithTrackInfo:trackInfo];
+				self.previousTrackLength = [((NSNumber*)[trackInfo valueForKey:@"duration"]) doubleValue] / 1000;
                 if(albumImageUrl != nil) {
 					[self loadImageWithUrl:albumImageUrl];
                 } else {
@@ -121,15 +127,19 @@
                     }];
                 }
             }];
-            if(self.previousTrack != nil && normalizedTitle != self.previousTrack) {//TODO починить скробблинг при переключении \
-				станций. А вообще, надо сделать как положено, с 50% или 4 минут. Скорее всего так проще.
-                [self.api scrobbleTrack:self.previousTrack.trackName artist:self.previousTrack.artist
-                              timestamp:[[NSDate date] timeIntervalSince1970]
-                             sessionKey:self.sessionKey completionHandler:^(NSError *error) {
-                    NSLog(@"%@", error);
-                }];
+            if(self.previousTrack != nil && normalizedTitle != self.previousTrack) {
+				NSTimeInterval deltaT = [[NSDate date] timeIntervalSince1970] - self.previousTrackStartTime;
+				NSLog(@"dT %f %f", deltaT, self.previousTrackLength);
+				if((self.previousTrackLength > 0 && deltaT > self.previousTrackLength / 2) || deltaT > 240) { //Cкробблинг с 50% или 4 минут
+					[self.api scrobbleTrack:self.previousTrack.trackName artist:self.previousTrack.artist
+								  timestamp:[[NSDate date] timeIntervalSince1970]
+								 sessionKey:self.sessionKey completionHandler:^(NSError *error) {
+						NSLog(@"%@", error);
+					}];
+				}
             }
             self.previousTrack = normalizedTitle;
+			self.previousTrackStartTime = [[NSDate date] timeIntervalSince1970];
             [self.api updateNowPlayingTrack:normalizedTitle.trackName artist:normalizedTitle.artist sessionKey:self.sessionKey completionHandler:^(NSError *error) {
                 NSLog(@"%@", error);
             }];
@@ -141,11 +151,9 @@
 	NSString *cachesPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
 	NSString *cacheFile = [cachesPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", [imageUrl md5]]];
 	if([[NSFileManager defaultManager] fileExistsAtPath:cacheFile]) {
-		NSLog(@"[i] Image cache hit");
 		self.trackImage.image = [UIImage imageWithContentsOfFile:cacheFile];
 	} else {
-		NSLog(@"[i] Image cache miss"); //TODO do it async
-		NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+		NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]]; //TODO make it non-blocking
 		self.trackImage.image = [UIImage imageWithData: imageData];
 		[UIImageJPEGRepresentation(self.trackImage.image, 85) writeToFile:cacheFile atomically:YES];
 	}
@@ -181,14 +189,19 @@
     }
 }
 
-//- (BOOL)canBecomeFirstResponder {
-//    return YES;
-//}
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
 
-//- (void)remoteControlReceivedWithEvent:(UIEvent *)event {
-//    if(event.subtype == UIEventSubtypeRemoteControlTogglePlayPause)
-//        NSLog(@"external command");
-//}
+- (void)remoteControlReceivedWithEvent:(UIEvent *)event {
+    if(event.subtype == UIEventSubtypeRemoteControlTogglePlayPause) {
+		if(self.isPlaying) {
+			[self pause];
+		} else {
+			[self play];
+		}
+	}
+}
 
 - (void)viewDidUnload {
     self.trackTitle = nil;
@@ -211,14 +224,14 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-//    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-//    [self becomeFirstResponder];
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    [self becomeFirstResponder];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-//    [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
-//    [self resignFirstResponder];
+    [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
+    [self resignFirstResponder];
+	[super viewDidDisappear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
