@@ -22,12 +22,16 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *trackArtist;
 @property (weak, nonatomic) IBOutlet UILabel *trackTitle;
+@property (weak, nonatomic) IBOutlet UILabel *albumTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *username;
 @property (weak, nonatomic) IBOutlet UIButton *playPauseButton;
 @property (weak, nonatomic) IBOutlet UIImageView *trackImage;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *titleActivityIndicator;
 
 @property (strong, nonatomic) AVPlayer *radio;
 @property (assign, nonatomic) BOOL isPlaying;
+@property (strong, nonatomic) NSString *albumTitle;
 
 @property (strong, nonatomic) LastFmAPI *api;
 @property (strong, nonatomic) NSString *sessionKey;
@@ -48,6 +52,9 @@
 
 @synthesize playPauseButton = _playPauseButton;
 @synthesize trackImage = _trackImage;
+@synthesize activityIndicator = _activityIndicator;
+@synthesize titleActivityIndicator = _titleActivityIndicator;
+@synthesize albumTitleLabel = _albumTitleLabel;
 
 @synthesize trackArtist = _trackArtist, trackTitle = _trackTitle, username = _username;
 @synthesize radio = _radio, isPlaying = _isPlaying;
@@ -55,6 +62,28 @@
 @synthesize sessionKey = _sessionKey;
 @synthesize previousTrack = _previousTrack;
 @synthesize previousTrackStartTime = _previousTrackStartTime, previousTrackLength = _previousTrackLength;
+@synthesize albumTitle = _albumTitle;
+
+- (void)setAlbumTitle:(NSString *)albumTitle {
+	_albumTitle = albumTitle;
+	self.albumTitleLabel.text = self.albumTitle;
+	CGRect frame;
+	if(albumTitle != nil && ![albumTitle isEqualToString:@""]) { //TODO сделать анимацию сдвига
+		frame = self.trackArtist.frame;
+		frame.origin.y = 0;
+		self.trackArtist.frame = frame;
+		frame = self.trackTitle.frame;
+		frame.origin.y = 10;
+		self.trackTitle.frame = frame;
+	} else {
+		frame = self.trackArtist.frame;
+		frame.origin.y = 5;
+		self.trackArtist.frame = frame;
+		frame = self.trackTitle.frame;
+		frame.origin.y = 17;
+		self.trackTitle.frame = frame;
+	}
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -79,6 +108,7 @@
 	self.radio = nil;
 	self.trackArtist.text = @"";
 	self.trackTitle.text = @"";
+	self.albumTitle = @"";
 	self.trackImage.image = nil;
 	
 	NSURL *streamUrl = [NSURL URLWithString:stationUrl];
@@ -106,10 +136,15 @@
         NormalizedTrackTitle *normalizedTitle = [NormalizedTrackTitle normalizedTrackTitleWithString:metadataTitle];
         self.trackArtist.text = normalizedTitle.artist;
         self.trackTitle.text = normalizedTitle.trackName;
+		self.trackImage.image = nil;
+		self.albumTitle = nil;
+		[self.titleActivityIndicator stopAnimating];
+		[self.activityIndicator startAnimating];
         if(normalizedTitle.isFilled) {
             [self.api getInfoForTrack:normalizedTitle.trackName artist:normalizedTitle.artist completionHandler:^(NSDictionary *trackInfo, NSError *error) {
                 NSString *albumImageUrl = [self getImageUrlWithTrackInfo:trackInfo];
 				self.previousTrackLength = [((NSNumber*)[trackInfo valueForKey:@"duration"]) doubleValue] / 1000;
+				self.albumTitle = [trackInfo valueForKeyPath:@"album.title"];
                 if(albumImageUrl != nil) {
 					[self loadImageWithUrl:albumImageUrl];
                 } else {
@@ -157,6 +192,7 @@
 		self.trackImage.image = [UIImage imageWithData: imageData];
 		[UIImageJPEGRepresentation(self.trackImage.image, 85) writeToFile:cacheFile atomically:YES];
 	}
+	[self.activityIndicator stopAnimating];
 }
 
 - (NSString*)getImageUrlWithTrackInfo:(NSDictionary*)trackInfo {
@@ -179,6 +215,7 @@
 	[self.radio play];
 	[self.playPauseButton setImage:[UIImage imageNamed:@"pauseIcon.png"] forState:UIControlStateNormal];
 	self.isPlaying = YES;
+	[self.titleActivityIndicator startAnimating];
 }
 
 - (IBAction)playPauseTap:(UIButton*)sender {
@@ -209,6 +246,9 @@
     self.username = nil;
     [self setPlayPauseButton:nil];
     [self setTrackImage:nil];
+	[self setActivityIndicator:nil];
+	[self setTitleActivityIndicator:nil];
+	[self setAlbumTitle:nil];
     [super viewDidUnload];
 }
 

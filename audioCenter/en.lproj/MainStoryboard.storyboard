@@ -62,12 +62,55 @@
                                 <rect key="frame" x="3" y="393" width="31" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="orA-Gt-bmh">
+                                <rect key="frame" x="143" y="140" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.095726415940000004" green="1" blue="0.22992270249999999" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="6tH-Dc-BEq">
                         <nil key="title"/>
                         <barButtonItem key="backBarButtonItem" title="Radio" id="qOo-yT-co7"/>
+                        <barButtonItem key="leftBarButtonItem" enabled="NO" title="Back" id="MHC-Dx-g1b"/>
+                        <view key="titleView" contentMode="scaleToFill" id="hQC-zr-f5r" userLabel="Title">
+                            <rect key="frame" x="62" y="1" width="203" height="43"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Artist" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="mj5-8l-Pm7" userLabel="Track Artist">
+                                    <rect key="frame" x="0.0" y="0.0" width="203" height="16"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="13"/>
+                                    <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                </label>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Title" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="NeB-Ti-Lb4" userLabel="Track Title">
+                                    <rect key="frame" x="0.0" y="10" width="203" height="20"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="13"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                </label>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Album" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="Xo1-gD-exE" userLabel="Album Title">
+                                    <rect key="frame" x="0.5" y="23" width="203" height="20"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="13"/>
+                                    <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                </label>
+                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="white" id="3MN-yX-rDJ">
+                                    <rect key="frame" x="91" y="12" width="20" height="20"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                                </activityIndicatorView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
+                        <barButtonItem key="rightBarButtonItem" image="listIcon.png" id="dbp-Ie-oqZ" userLabel="Radiostations List">
+                            <connections>
+                                <segue destination="nQ6-zE-nsv" kind="push" identifier="ShowRadiostations" id="sA9-DG-bmK"/>
+                            </connections>
+                        </barButtonItem>
                         <connections>
                             <outlet property="leftBarButtonItem" destination="MHC-Dx-g1b" id="xaT-yc-qv0"/>
                             <outlet property="rightBarButtonItem" destination="dbp-Ie-oqZ" id="hkG-mN-OFW"/>
@@ -79,41 +122,16 @@
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="orA-Gt-bmh" id="Lfd-IA-r78"/>
+                        <outlet property="albumTitleLabel" destination="Xo1-gD-exE" id="SP7-BF-4Ha"/>
                         <outlet property="playPauseButton" destination="vYU-px-Tkf" id="SCU-lY-Sap"/>
+                        <outlet property="titleActivityIndicator" destination="3MN-yX-rDJ" id="3OD-97-6jU"/>
                         <outlet property="trackArtist" destination="mj5-8l-Pm7" id="dNc-ao-w94"/>
                         <outlet property="trackImage" destination="MBi-U2-zCO" id="BJH-AZ-DAw"/>
                         <outlet property="trackTitle" destination="NeB-Ti-Lb4" id="CfH-E2-E20"/>
                         <outlet property="username" destination="jq4-w4-bbM" id="d3o-M3-ShV"/>
                     </connections>
                 </viewController>
-                <barButtonItem image="listIcon.png" id="dbp-Ie-oqZ" userLabel="Radiostations List">
-                    <connections>
-                        <segue destination="nQ6-zE-nsv" kind="push" identifier="ShowRadiostations" id="sA9-DG-bmK"/>
-                    </connections>
-                </barButtonItem>
-                <barButtonItem enabled="NO" title="Back" id="MHC-Dx-g1b"/>
-                <view contentMode="scaleToFill" id="hQC-zr-f5r" userLabel="Title">
-                    <rect key="frame" x="-5" y="0.0" width="320" height="20"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="mj5-8l-Pm7" userLabel="Track Artist">
-                            <rect key="frame" x="-5" y="-8" width="330" height="16"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="13"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            <color key="highlightedColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        </label>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="NeB-Ti-Lb4" userLabel="Track Title">
-                            <rect key="frame" x="-5" y="9" width="330" height="16"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="13"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            <color key="highlightedColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        </label>
-                    </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                </view>
             </objects>
             <point key="canvasLocation" x="-1416" y="-201"/>
         </scene>
@@ -122,7 +140,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eDo-4y-FDN" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="nQ6-zE-nsv" customClass="RadiostationListViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RIJ-Ts-457">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Yaj-r5-gbY">
@@ -189,7 +207,10 @@
         <class className="RadioViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/RadioViewController.h"/>
             <relationships>
+                <relationship kind="outlet" name="activityIndicator" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="albumTitleLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="playPauseButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="titleActivityIndicator" candidateClass="UIActivityIndicatorView"/>
                 <relationship kind="outlet" name="trackArtist" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="trackImage" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="trackTitle" candidateClass="UILabel"/>
