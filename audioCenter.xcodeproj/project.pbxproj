@@ -166,6 +166,7 @@
 			buildPhases = (
 				F321FA7A14F808920021E3BC /* Sources */,
 				F321FA7B14F808920021E3BC /* Frameworks */,
+				F3BCFA5015023762001C6EFF /* ShellScript */,
 				F321FA7C14F808920021E3BC /* Resources */,
 			);
 			buildRules = (
@@ -223,6 +224,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		F3BCFA5015023762001C6EFF /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" ${PRODUCT_SETTINGS_PATH})\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" ${PRODUCT_SETTINGS_PATH}";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F321FA7A14F808920021E3BC /* Sources */ = {
