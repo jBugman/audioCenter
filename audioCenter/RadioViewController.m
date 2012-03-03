@@ -40,9 +40,6 @@
 @property (assign, nonatomic) NSTimeInterval previousTrackStartTime;
 @property (assign, nonatomic) NSTimeInterval previousTrackLength;
 
-- (NSString*)getImageUrlWithTrackInfo:(NSDictionary*)trackInfo;
-- (NSString*)getImageUrlWithArtistInfo:(NSDictionary*)artistInfo;
-
 - (void)loadImageWithUrl:(NSString*)imageUrl;
 
 @end
@@ -142,7 +139,7 @@
 		[self.activityIndicator startAnimating];
         if(normalizedTitle.isFilled) {
             [self.api getInfoForTrack:normalizedTitle.trackName artist:normalizedTitle.artist completionHandler:^(NSDictionary *trackInfo, NSError *error) {
-                NSString *albumImageUrl = [self getImageUrlWithTrackInfo:trackInfo];
+                NSString *albumImageUrl = [[[trackInfo valueForKeyPath:@"album.image"] lastObject] valueForKey:@"#text"];
 				self.previousTrackLength = [((NSNumber*)[trackInfo valueForKey:@"duration"]) doubleValue] / 1000;
 				self.albumTitle = [trackInfo valueForKeyPath:@"album.title"];
                 if(albumImageUrl != nil) {
@@ -152,7 +149,7 @@
 						if(error) {
 							NSLog(@"error: %@", error);
 						} else {
-							NSString *artistImageUrl = [self getImageUrlWithArtistInfo:artistInfo];
+							NSString *artistImageUrl = [[[artistInfo valueForKey:@"image"] lastObject] valueForKey:@"#text"];
 							if(artistImageUrl != nil) {
 								[self loadImageWithUrl:artistImageUrl];
 							} else {
@@ -187,22 +184,20 @@
 	NSString *cacheFile = [cachesPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", [imageUrl md5]]];
 	if([[NSFileManager defaultManager] fileExistsAtPath:cacheFile]) {
 		self.trackImage.image = [UIImage imageWithContentsOfFile:cacheFile];
+		[self.activityIndicator stopAnimating];
 	} else {
-		NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]]; //TODO make it non-blocking
-		self.trackImage.image = [UIImage imageWithData: imageData];
-		[UIImageJPEGRepresentation(self.trackImage.image, 85) writeToFile:cacheFile atomically:YES];
+		dispatch_queue_t downloadQueue = dispatch_queue_create("imageDownloader", NULL);
+		dispatch_async(downloadQueue, ^{
+			NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+			UIImage *image = [UIImage imageWithData: imageData];
+			[UIImageJPEGRepresentation(image, 85) writeToFile:cacheFile atomically:YES];
+			dispatch_async(dispatch_get_main_queue(), ^{
+				self.trackImage.image = image;
+				[self.activityIndicator stopAnimating];
+			});
+		});
+		dispatch_release(downloadQueue);
 	}
-	[self.activityIndicator stopAnimating];
-}
-
-- (NSString*)getImageUrlWithTrackInfo:(NSDictionary*)trackInfo {
-	NSArray *images = [trackInfo valueForKeyPath:@"album.image"];
-	return [[images lastObject] valueForKey:@"#text"];
-}
-
-- (NSString*)getImageUrlWithArtistInfo:(NSDictionary*)artistInfo {
-    NSArray *images = [artistInfo valueForKey:@"image"];
-    return [[images lastObject] valueForKey:@"#text"];
 }
 
 - (void)pause {
@@ -215,7 +210,7 @@
 	[self.radio play];
 	[self.playPauseButton setImage:[UIImage imageNamed:@"pauseIcon.png"] forState:UIControlStateNormal];
 	self.isPlaying = YES;
-	[self.titleActivityIndicator startAnimating];
+	[self.titleActivityIndicator startAnimating]; //TODO fix continous play
 }
 
 - (IBAction)playPauseTap:(UIButton*)sender {

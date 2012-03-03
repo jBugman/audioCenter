@@ -152,8 +152,7 @@
         [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
         [request setHTTPBody:postData];
     }
-	dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-//    (self.dispatchQueue != NULL) ? self.dispatchQueue : dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+	dispatch_queue_t queue = dispatch_queue_create("lastFm", NULL);
 	dispatch_async(queue, ^{
 		NSError *error = nil;
 		NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:NULL error:&error];
@@ -169,6 +168,7 @@
                 handler(response, error);
 		});
 	});
+	dispatch_release(queue);
 }
 
 - (NSString*)methodSignatureWithParameters:(NSDictionary*)parameters {
