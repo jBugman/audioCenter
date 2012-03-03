@@ -16,6 +16,7 @@
 
 
 #define TIMED_METADATA @"timedMetadata"
+#define DEFAULT_RADIO_URL @"http://87.118.78.20:2700/"
 
 
 @interface RadioViewController() <RadiostationListDelegate>
@@ -41,6 +42,7 @@
 @property (assign, nonatomic) NSTimeInterval previousTrackLength;
 
 - (void)loadImageWithUrl:(NSString*)imageUrl;
+- (void)processCache;
 
 @end
 
@@ -86,8 +88,12 @@
     [super viewDidLoad];
     
     self.api = [[LastFmAPI alloc] init];
-	[self setRadiostation:@"http://ultradarkradio.com:3026/"];
+	[self setRadiostation:DEFAULT_RADIO_URL];
 	
+	[self processCache];
+}
+
+-(void)processCache {
 	NSString *cachesPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
 	NSArray *files = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:cachesPath error:nil] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.jpg'"]];
 	long totalSize = 0;
@@ -210,7 +216,9 @@
 	[self.radio play];
 	[self.playPauseButton setImage:[UIImage imageNamed:@"pauseIcon.png"] forState:UIControlStateNormal];
 	self.isPlaying = YES;
-	[self.titleActivityIndicator startAnimating]; //TODO fix continous play
+	if(!self.radio.currentItem.timedMetadata) {
+		[self.titleActivityIndicator startAnimating];
+	}
 }
 
 - (IBAction)playPauseTap:(UIButton*)sender {
@@ -239,11 +247,11 @@
     self.trackTitle = nil;
     self.trackArtist = nil;
     self.username = nil;
-    [self setPlayPauseButton:nil];
-    [self setTrackImage:nil];
-	[self setActivityIndicator:nil];
-	[self setTitleActivityIndicator:nil];
-	[self setAlbumTitle:nil];
+    self.playPauseButton = nil;
+    self.trackImage = nil;
+	self.activityIndicator = nil;
+	self.titleActivityIndicator = nil;
+	self.albumTitle = nil;
     [super viewDidUnload];
 }
 
