@@ -7,15 +7,12 @@
 //
 
 #import "AppDelegate.h"
-#import <AVFoundation/AVAudioSession.h>
 
 @implementation AppDelegate
 
 @synthesize window = _window;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
-    [[AVAudioSession sharedInstance] setActive:YES error:nil];
     return YES;
 }
 							
