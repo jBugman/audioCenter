@@ -11,7 +11,7 @@
 
 @interface RadiostationListViewController()
 
-- (IBAction)tapRadiostation:(UIButton*)sender;
+@property (strong, readonly) NSArray *stationsList;
 
 - (void)selectRadiostation:(NSString*)url;
 
@@ -20,6 +20,18 @@
 @implementation RadiostationListViewController
 
 @synthesize delegate = _delegate;
+@synthesize stationsList = _stationsList;
+
+- (NSArray *)stationsList {
+	if(!_stationsList) {
+		_stationsList = [[NSArray alloc] initWithObjects:
+						 @"http://ultradarkradio.com:3026/",
+						 @"http://87.118.78.20:2700/",
+						 @"http://205.188.215.231:8000/",
+						 @"http://93.81.248.234:8000/", nil];
+	}
+	return _stationsList;
+}
 
 - (void)selectRadiostation:(NSString*)url {
 	[self.delegate setRadiostation:url];
@@ -29,12 +41,30 @@
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-	[self selectRadiostation:[tableView cellForRowAtIndexPath:indexPath].textLabel.text];
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+	UITableViewCell *cell;
+	cell = [self.tableView dequeueReusableCellWithIdentifier:@"plainCell"];
+	if(!cell) {
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"plainCell"];
+	}
+	cell.textLabel.text = [self.stationsList objectAtIndex:indexPath.row];
+	return cell;
 }
 
-- (IBAction)tapRadiostation:(UIButton*)sender {
-	[self selectRadiostation:sender.titleLabel.text];
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+	return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	if(section == 0) {
+		return [self.stationsList count];
+	} else {
+		return 0;
+	}
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	[self selectRadiostation:[self.stationsList objectAtIndex:indexPath.row]];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
