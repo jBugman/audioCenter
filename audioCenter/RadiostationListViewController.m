@@ -11,33 +11,30 @@
 
 @interface RadiostationListViewController()
 
-- (IBAction)selectRadiostation:(UIButton*)sender;
+- (IBAction)tapRadiostation:(UIButton*)sender;
+
+- (void)selectRadiostation:(NSString*)url;
 
 @end
-
 
 @implementation RadiostationListViewController
 
 @synthesize delegate = _delegate;
 
-- (IBAction)selectRadiostation:(UIButton*)sender {
-	[self.delegate setRadiostation:sender.titleLabel.text];
+- (void)selectRadiostation:(NSString*)url {
+	[self.delegate setRadiostation:url];
 	if([self.delegate respondsToSelector:@selector(play)]) {
 		[self.delegate play];
 	}
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)viewDidLoad {
-	[super viewDidLoad];
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+	[self selectRadiostation:[tableView cellForRowAtIndexPath:indexPath].textLabel.text];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-}
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
+- (IBAction)tapRadiostation:(UIButton*)sender {
+	[self selectRadiostation:sender.titleLabel.text];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

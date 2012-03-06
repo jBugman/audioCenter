@@ -17,7 +17,7 @@
 
 @end
 
-@interface RadiostationListViewController : UIViewController
+@interface RadiostationListViewController : UITableViewController
 
 @property (weak, nonatomic) id<RadiostationListDelegate> delegate;
 
