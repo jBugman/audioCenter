@@ -13,7 +13,7 @@
 @property (strong, nonatomic) NSString *artist;
 @property (strong, nonatomic) NSString *trackName;
 
-@property BOOL isFilled;
+@property (readonly) BOOL isFilled;
 
 - (BOOL)isEqualToTitle:(NormalizedTrackTitle*)otherTitle;
 

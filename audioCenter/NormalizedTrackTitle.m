@@ -17,9 +17,12 @@
     if(self) {
         self.artist = @"Unknown Artist";
         self.trackName = @"Unknown Track";
-        self.isFilled = NO;
     }
     return self;
+}
+
+- (BOOL)isFilled {
+	return (![self.artist isEqualToString:@"Unknown Artist"] && ![self.trackName isEqualToString:@"Unknown Track"]);
 }
 
 - (BOOL)isEqualToTitle:(NormalizedTrackTitle*)otherTitle {
@@ -44,7 +47,6 @@
         } else {
             result.trackName = [[titleParts objectAtIndex:1] stringByTrimmingCharactersInSet:trimSet];
         }
-        result.isFilled = YES;
         return result;
     }
 }

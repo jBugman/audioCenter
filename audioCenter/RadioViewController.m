@@ -18,6 +18,8 @@
 
 
 #define TIMED_METADATA @"timedMetadata"
+#define RATE @"rate"
+
 #define DEFAULT_RADIO_URL @"http://87.118.78.20:2700/"
 
 
@@ -32,6 +34,7 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *titleActivityIndicator;
 
+@property (strong, nonatomic) NSURL *radioUrl;
 @property (strong, nonatomic) AVPlayer *radio;
 @property (assign, nonatomic) BOOL isPlaying;
 @property (assign, nonatomic) BOOL wasInterrupted;
@@ -46,6 +49,7 @@
 
 - (void)loadImageWithUrl:(NSString*)imageUrl;
 - (void)processCache;
+- (void)updateTrackInfo:(NSArray*)metadata;
 
 void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, 
 									   const void *inPropertyValue);
@@ -61,6 +65,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 
 @synthesize trackArtist = _trackArtist, trackTitle = _trackTitle, username = _username;
 @synthesize radio = _radio, isPlaying = _isPlaying, wasInterrupted = _wasInterrupted;
+@synthesize radioUrl = _radioUrl;
 @synthesize api = _api;
 @synthesize sessionKey = _sessionKey;
 @synthesize previousTrack = _previousTrack;
@@ -88,7 +93,34 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	}
 }
 
--(void)processCache {
+- (void)setRadioUrl:(NSURL *)radioUrl {
+	_radioUrl = radioUrl;
+	[self.radio pause];
+	[self.radio.currentItem removeObserver:self forKeyPath:TIMED_METADATA];
+	[self.radio removeObserver:self forKeyPath:RATE];
+	self.radio = nil;
+	self.previousTrack = nil;
+	
+	self.trackArtist.text = @"";
+	self.trackTitle.text = @"";
+	self.albumTitle = @"";
+	self.trackImage.image = nil;
+}
+
+- (AVPlayer *)radio {
+	if(!self.radioUrl) {
+		return nil;
+	} else {
+		if(!_radio) {
+			_radio = [[AVPlayer alloc] initWithURL: self.radioUrl];
+			[_radio.currentItem addObserver:self forKeyPath:TIMED_METADATA options:NSKeyValueObservingOptionNew context:NULL];
+			[_radio addObserver:self forKeyPath:RATE options:NSKeyValueObservingOptionNew context:NULL];
+		}
+		return _radio;
+	}
+}
+
+- (void)processCache {
 	NSString *cachesPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
 	NSArray *files = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:cachesPath error:nil] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.jpg'"]];
 	long totalSize = 0;
@@ -100,18 +132,8 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	NSLog(@"[i] Cache size: %@K", [NSNumber numberWithLong:totalSize]);
 }
 
-- (void)setRadiostation:(NSString*)stationUrl {
-	[self.radio pause];
-	[self.radio.currentItem removeObserver:self forKeyPath:TIMED_METADATA];
-	self.radio = nil;
-	self.trackArtist.text = @"";
-	self.trackTitle.text = @"";
-	self.albumTitle = @"";
-	self.trackImage.image = nil;
-	
-	NSURL *streamUrl = [NSURL URLWithString:stationUrl];
-	self.radio = [[AVPlayer alloc] initWithURL: streamUrl];
-    [self.radio.currentItem addObserver:self forKeyPath:TIMED_METADATA options:NSKeyValueObservingOptionNew context:NULL];
+- (void)setRadiostation:(NSString*)stationUrl {	
+	self.radioUrl = [NSURL URLWithString:stationUrl];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -124,60 +146,72 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
     if([keyPath isEqualToString:TIMED_METADATA]) { // Получили обновленную метадату — значит играет новый трек или это первый запуск
         AVPlayerItem *playerItem = object;
         NSArray *metadata = playerItem.timedMetadata;
-        NSString *metadataTitle;
-        for(id entry in metadata) {
-            if([[entry valueForKey:@"key"] isEqualToString:@"title"]) {
-                metadataTitle = [entry valueForKey:@"value"];
-                break;
-            }
-        }
-        NormalizedTrackTitle *normalizedTitle = [NormalizedTrackTitle normalizedTrackTitleWithString:metadataTitle];
-        self.trackArtist.text = normalizedTitle.artist;
-        self.trackTitle.text = normalizedTitle.trackName;
-		self.trackImage.image = nil;
-		self.albumTitle = nil;
+		[self updateTrackInfo:metadata];
+	} else if([keyPath isEqualToString:RATE]) { // Изменилось состояние играет/не играет
+		AVPlayer *player = object;
+		if(self.previousTrack.isFilled && player.rate > 0) {
+			[self.titleActivityIndicator stopAnimating];
+		}
+	}
+}
+		
+- (void)updateTrackInfo:(NSArray *)metadata {	
+	NSString *metadataTitle;
+	for(id entry in metadata) {
+		if([[entry valueForKey:@"key"] isEqualToString:@"title"]) {
+			metadataTitle = [entry valueForKey:@"value"];
+			break;
+		}
+	}
+	NormalizedTrackTitle *normalizedTitle = [NormalizedTrackTitle normalizedTrackTitleWithString:metadataTitle];
+	if(!normalizedTitle.isFilled) {
 		[self.titleActivityIndicator stopAnimating];
-		[self.activityIndicator startAnimating];
-        if(normalizedTitle.isFilled) {
-            [self.api getInfoForTrack:normalizedTitle.trackName artist:normalizedTitle.artist completionHandler:^(NSDictionary *trackInfo, NSError *error) {
-                NSString *albumImageUrl = [[[trackInfo valueForKeyPath:@"album.image"] lastObject] valueForKey:@"#text"];
-				self.previousTrackLength = [((NSNumber*)[trackInfo valueForKey:@"duration"]) doubleValue] / 1000;
-				self.albumTitle = [trackInfo valueForKeyPath:@"album.title"];
-                if(albumImageUrl != nil) {
-					[self loadImageWithUrl:albumImageUrl];
-                } else {
-                    [self.api getInfoForArtist:normalizedTitle.artist completionHandler:^(NSDictionary *artistInfo, NSError *error) {
-						if(error) {
-							NSLog(@"error: %@", error);
-						} else {
-							NSString *artistImageUrl = [[[artistInfo valueForKey:@"image"] lastObject] valueForKey:@"#text"];
-							if(artistImageUrl != nil) {
-								[self loadImageWithUrl:artistImageUrl];
-							} else {
-								self.trackImage.image = nil;
-							}
-						}
-                    }];
-                }
-            }];
-            if(self.previousTrack != nil && normalizedTitle != self.previousTrack) {
-				NSTimeInterval deltaT = [[NSDate date] timeIntervalSince1970] - self.previousTrackStartTime;
-				NSLog(@"dT %f %f", deltaT, self.previousTrackLength);
-				if((self.previousTrackLength > 0 && deltaT > self.previousTrackLength / 2) || deltaT > 240) { //Cкробблинг с 50% или 4 минут
-					[self.api scrobbleTrack:self.previousTrack.trackName artist:self.previousTrack.artist
-								  timestamp:[[NSDate date] timeIntervalSince1970]
-								 sessionKey:self.sessionKey completionHandler:^(NSError *error) {
-						NSLog(@"%@", error);
-					}];
+		return;
+	}
+	self.trackArtist.text = normalizedTitle.artist;
+	self.trackTitle.text = normalizedTitle.trackName;
+	self.trackImage.image = nil;
+	self.albumTitle = nil;
+	[self.titleActivityIndicator stopAnimating];
+	[self.activityIndicator startAnimating];
+
+	[self.api getInfoForTrack:normalizedTitle.trackName artist:normalizedTitle.artist completionHandler:^(NSDictionary *trackInfo, NSError *error) {
+		NSString *albumImageUrl = [[[trackInfo valueForKeyPath:@"album.image"] lastObject] valueForKey:@"#text"];
+		self.previousTrackLength = [((NSNumber*)[trackInfo valueForKey:@"duration"]) doubleValue] / 1000;
+		self.albumTitle = [trackInfo valueForKeyPath:@"album.title"];
+		if(albumImageUrl != nil) {
+			[self loadImageWithUrl:albumImageUrl];
+		} else {
+			[self.api getInfoForArtist:normalizedTitle.artist completionHandler:^(NSDictionary *artistInfo, NSError *error) {
+				if(error) {
+					NSLog(@"error: %@", error);
+				} else {
+					NSString *artistImageUrl = [[[artistInfo valueForKey:@"image"] lastObject] valueForKey:@"#text"];
+					if(artistImageUrl != nil) {
+						[self loadImageWithUrl:artistImageUrl];
+					} else {
+						self.trackImage.image = nil;
+					}
 				}
-            }
-            self.previousTrack = normalizedTitle;
-			self.previousTrackStartTime = [[NSDate date] timeIntervalSince1970];
-            [self.api updateNowPlayingTrack:normalizedTitle.trackName artist:normalizedTitle.artist sessionKey:self.sessionKey completionHandler:^(NSError *error) {
-                NSLog(@"%@", error);
-            }];
-        }
-    }
+			}];
+		}
+	}];
+	if(self.previousTrack != nil && normalizedTitle != self.previousTrack) {
+		NSTimeInterval deltaT = [[NSDate date] timeIntervalSince1970] - self.previousTrackStartTime;
+		NSLog(@"dT %f %f", deltaT, self.previousTrackLength);
+		if((self.previousTrackLength > 0 && deltaT > self.previousTrackLength / 2) || deltaT > 240) { //Cкробблинг с 50% или 4 минут
+			[self.api scrobbleTrack:self.previousTrack.trackName artist:self.previousTrack.artist
+						  timestamp:[[NSDate date] timeIntervalSince1970]
+						 sessionKey:self.sessionKey completionHandler:^(NSError *error) {
+				NSLog(@"%@", error);
+			}];
+		}
+	}
+	self.previousTrack = normalizedTitle;
+	self.previousTrackStartTime = [[NSDate date] timeIntervalSince1970];
+	[self.api updateNowPlayingTrack:normalizedTitle.trackName artist:normalizedTitle.artist sessionKey:self.sessionKey completionHandler:^(NSError *error) {
+		NSLog(@"%@", error);
+	}];
 }
 
 - (void)loadImageWithUrl:(NSString*)imageUrl {
@@ -213,14 +247,16 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
 	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, (__bridge void*)self);
+
+	//if(!self.previousTrack.isFilled) {
+	if(!self.radio.currentItem.timedMetadata) {
+		[self.titleActivityIndicator startAnimating];
+	}
 	
 	[self.radio play];
 	[self.playPauseButton setImage:[UIImage imageNamed:@"pauseIcon.png"] forState:UIControlStateNormal];
 	self.isPlaying = YES;
 	self.wasInterrupted = NO;
-	if(!self.radio.currentItem.timedMetadata) {
-		[self.titleActivityIndicator startAnimating];
-	}
 }
 
 - (IBAction)playPauseTap:(UIButton*)sender {
