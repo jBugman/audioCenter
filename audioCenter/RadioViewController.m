@@ -151,6 +151,10 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 		AVPlayer *player = object;
 		if(self.previousTrack.isFilled && player.rate > 0) {
 			[self.titleActivityIndicator stopAnimating];
+			if([self.trackArtist.text isEqualToString:@""]) {
+				self.trackArtist.text = @"Unknown Artist";
+				self.trackTitle.text = @"Unknown Track";
+			}
 		}
 	}
 }
