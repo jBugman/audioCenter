@@ -30,6 +30,7 @@
 		F374690814FAB6AE00C6D165 /* bottomBarTexture@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F374690614FAB6AE00C6D165 /* bottomBarTexture@2x.png */; };
 		F374690B14FAB6B600C6D165 /* playIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = F374690914FAB6B600C6D165 /* playIcon.png */; };
 		F374690C14FAB6B600C6D165 /* playIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F374690A14FAB6B600C6D165 /* playIcon@2x.png */; };
+		F3A5509015094BA400BBEEBA /* RadiostationMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = F3A5508F15094BA400BBEEBA /* RadiostationMetadata.m */; };
 		F3BCFA4714FACB07001C6EFF /* RadiostationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3BCFA4614FACB07001C6EFF /* RadiostationListViewController.m */; };
 		F3BCFA4A14FAD958001C6EFF /* as.png in Resources */ = {isa = PBXBuildFile; fileRef = F3BCFA4914FAD958001C6EFF /* as.png */; };
 /* End PBXBuildFile section */
@@ -66,6 +67,8 @@
 		F374690614FAB6AE00C6D165 /* bottomBarTexture@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bottomBarTexture@2x.png"; sourceTree = "<group>"; };
 		F374690914FAB6B600C6D165 /* playIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playIcon.png; sourceTree = "<group>"; };
 		F374690A14FAB6B600C6D165 /* playIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "playIcon@2x.png"; sourceTree = "<group>"; };
+		F3A5508E15094BA400BBEEBA /* RadiostationMetadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadiostationMetadata.h; sourceTree = "<group>"; };
+		F3A5508F15094BA400BBEEBA /* RadiostationMetadata.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RadiostationMetadata.m; sourceTree = "<group>"; };
 		F3BCFA4514FACB07001C6EFF /* RadiostationListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadiostationListViewController.h; sourceTree = "<group>"; };
 		F3BCFA4614FACB07001C6EFF /* RadiostationListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RadiostationListViewController.m; sourceTree = "<group>"; };
 		F3BCFA4914FAD958001C6EFF /* as.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = as.png; sourceTree = "<group>"; };
@@ -132,6 +135,8 @@
 				F321FAB714F841A20021E3BC /* LastFmAPI.m */,
 				F3721EEB14F8E8D200AB5A5B /* NormalizedTrackTitle.h */,
 				F3721EEC14F8E8D200AB5A5B /* NormalizedTrackTitle.m */,
+				F3A5508E15094BA400BBEEBA /* RadiostationMetadata.h */,
+				F3A5508F15094BA400BBEEBA /* RadiostationMetadata.m */,
 				F321FAB914F843E70021E3BC /* NSString+md5.h */,
 				F321FABA14F843FE0021E3BC /* NSString+md5.m */,
 				F37468FA14FAB1EE00C6D165 /* assets */,
@@ -265,6 +270,7 @@
 				F321FABB14F843FF0021E3BC /* NSString+md5.m in Sources */,
 				F3721EED14F8E8D200AB5A5B /* NormalizedTrackTitle.m in Sources */,
 				F3BCFA4714FACB07001C6EFF /* RadiostationListViewController.m in Sources */,
+				F3A5509015094BA400BBEEBA /* RadiostationMetadata.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,6 +347,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "audioCenter/audioCenter-Prefix.pch";
 				INFOPLIST_FILE = "audioCenter/audioCenter-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -352,6 +359,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "audioCenter/audioCenter-Prefix.pch";
 				INFOPLIST_FILE = "audioCenter/audioCenter-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

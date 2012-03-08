@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.0" toolsVersion="1938" systemVersion="11D50b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="JwI-ur-4tx">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11D50b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="JwI-ur-4tx">
     <dependencies>
+        <deployment defaultVersion="1296" identifier="iOS"/>
         <development defaultVersion="4200" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="933"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1179"/>
     </dependencies>
     <scenes>
+        <!--Navigation Controller-->
         <scene sceneID="Qxd-1a-LSY">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mSp-g4-HIK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -19,6 +21,7 @@
             </objects>
             <point key="canvasLocation" x="-1844" y="-201"/>
         </scene>
+        <!--Radio View Controller - Radio-->
         <scene sceneID="5">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
@@ -36,8 +39,8 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </imageView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.90000000000000002" contentMode="left" text="jBugman" lineBreakMode="tailTruncation" minimumFontSize="10" id="jq4-w4-bbM" userLabel="Username">
-                                <rect key="frame" x="36" y="393" width="232" height="20"/>
+                            <label opaque="NO" clipsSubviews="YES" alpha="0.90000000000000002" contentMode="left" text="Station Title" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="13" id="jq4-w4-bbM" userLabel="Station Title">
+                                <rect key="frame" x="8" y="396" width="304" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -58,8 +61,8 @@
                                     <action selector="playPauseTap:" destination="2" eventType="touchUpInside" id="zGL-mL-U0v"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="as.png" id="w4S-wr-Pal">
-                                <rect key="frame" x="3" y="393" width="31" height="20"/>
+                            <imageView userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="scaleToFill" image="as.png" id="w4S-wr-Pal" userLabel="Scrobbling Status">
+                                <rect key="frame" x="8" y="328" width="31" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="orA-Gt-bmh">
@@ -124,16 +127,18 @@
                         <outlet property="activityIndicator" destination="orA-Gt-bmh" id="Lfd-IA-r78"/>
                         <outlet property="albumTitleLabel" destination="Xo1-gD-exE" id="SP7-BF-4Ha"/>
                         <outlet property="playPauseButton" destination="vYU-px-Tkf" id="SCU-lY-Sap"/>
+                        <outlet property="scrobblingStatus" destination="w4S-wr-Pal" id="CV6-Ze-ieO"/>
+                        <outlet property="stationTitle" destination="jq4-w4-bbM" id="1L5-sq-YhC"/>
                         <outlet property="titleActivityIndicator" destination="3MN-yX-rDJ" id="3OD-97-6jU"/>
                         <outlet property="trackArtist" destination="mj5-8l-Pm7" id="dNc-ao-w94"/>
                         <outlet property="trackImage" destination="MBi-U2-zCO" id="BJH-AZ-DAw"/>
                         <outlet property="trackTitle" destination="NeB-Ti-Lb4" id="CfH-E2-E20"/>
-                        <outlet property="username" destination="jq4-w4-bbM" id="d3o-M3-ShV"/>
                     </connections>
                 </viewController>
             </objects>
             <point key="canvasLocation" x="-1416" y="-201"/>
         </scene>
+        <!--Radiostation List View Controller - Stations-->
         <scene sceneID="nf7-rz-FTq">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G64-z6-fHs" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -188,11 +193,12 @@
                 <relationship kind="outlet" name="activityIndicator" candidateClass="UIActivityIndicatorView"/>
                 <relationship kind="outlet" name="albumTitleLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="playPauseButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="scrobblingStatus" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="stationTitle" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="titleActivityIndicator" candidateClass="UIActivityIndicatorView"/>
                 <relationship kind="outlet" name="trackArtist" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="trackImage" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="trackTitle" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="username" candidateClass="UILabel"/>
             </relationships>
         </class>
         <class className="RadiostationListViewController" superclassName="UITableViewController">

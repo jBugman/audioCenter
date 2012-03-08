@@ -11,10 +11,12 @@
 #import <AVFoundation/AVPlayer.h>
 #import <AVFoundation/AVPlayerItem.h>
 #import <AVFoundation/AVAudioSession.h>
+#import <AVFoundation/AVAsset.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import "NormalizedTrackTitle.h"
 #import "RadiostationListViewController.h"
 #import "NSString+md5.h"
+#import "RadiostationMetadata.h"
 
 
 #define TIMED_METADATA @"timedMetadata"
@@ -28,11 +30,13 @@
 @property (weak, nonatomic) IBOutlet UILabel *trackArtist;
 @property (weak, nonatomic) IBOutlet UILabel *trackTitle;
 @property (weak, nonatomic) IBOutlet UILabel *albumTitleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *username;
 @property (weak, nonatomic) IBOutlet UIButton *playPauseButton;
 @property (weak, nonatomic) IBOutlet UIImageView *trackImage;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *titleActivityIndicator;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *titleActivityIndicator;
+@property (weak, nonatomic) IBOutlet UILabel *stationTitle;
+@property (weak, nonatomic) IBOutlet UIImageView *scrobblingStatus;
+
 
 @property (strong, nonatomic) NSURL *radioUrl;
 @property (strong, nonatomic) AVPlayer *radio;
@@ -63,7 +67,8 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 @synthesize titleActivityIndicator = _titleActivityIndicator;
 @synthesize albumTitleLabel = _albumTitleLabel;
 
-@synthesize trackArtist = _trackArtist, trackTitle = _trackTitle, username = _username;
+@synthesize trackArtist = _trackArtist, trackTitle = _trackTitle;
+@synthesize scrobblingStatus = _scrobblingStatus, stationTitle = _stationTitle;
 @synthesize radio = _radio, isPlaying = _isPlaying, wasInterrupted = _wasInterrupted;
 @synthesize radioUrl = _radioUrl;
 @synthesize api = _api;
@@ -105,6 +110,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	self.trackTitle.text = @"";
 	self.albumTitle = @"";
 	self.trackImage.image = nil;
+	self.stationTitle.text = @"";
 }
 
 - (AVPlayer *)radio {
@@ -143,7 +149,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if([keyPath isEqualToString:TIMED_METADATA]) { // Получили обновленную метадату — значит играет новый трек или это первый запуск
+    if([keyPath isEqualToString:TIMED_METADATA]) { // Играет новый трек или это первый запуск
         AVPlayerItem *playerItem = object;
         NSArray *metadata = playerItem.timedMetadata;
 		[self updateTrackInfo:metadata];
@@ -253,10 +259,13 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
 	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, (__bridge void*)self);
 
-	//if(!self.previousTrack.isFilled) {
 	if(!self.radio.currentItem.timedMetadata) {
 		[self.titleActivityIndicator startAnimating];
 	}
+	
+	[RadiostationMetadata getStationTitleWithUrl:self.radioUrl completionHandler:^(NSString *title) {
+		self.stationTitle.text = title;
+	}];
 	
 	[self.radio play];
 	[self.playPauseButton setImage:[UIImage imageNamed:@"pauseIcon.png"] forState:UIControlStateNormal];
@@ -326,7 +335,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	[self.api getSessionWithUsername:@"jBugman" password:@"lastfm"
                    completionHandler:^(NSDictionary *session, NSError *error) {
 					   self.sessionKey = [session valueForKey:@"key"];
-					   self.username.text = [session valueForKey:@"name"];
+					   self.scrobblingStatus.alpha = 1.0f;
 				   }];
 	
 	[self processCache];
@@ -338,7 +347,8 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	
     self.trackTitle = nil;
     self.trackArtist = nil;
-    self.username = nil;
+    self.scrobblingStatus = nil;
+	self.stationTitle = nil;
     self.playPauseButton = nil;
     self.trackImage = nil;
 	self.activityIndicator = nil;
