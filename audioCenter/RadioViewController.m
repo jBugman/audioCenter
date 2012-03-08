@@ -23,7 +23,7 @@
 #define DEFAULT_RADIO_URL @"http://87.118.78.20:2700/"
 
 
-@interface RadioViewController() <RadiostationListDelegate>
+@interface RadioViewController() <RadiostationListDelegate, AVAudioSessionDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *trackArtist;
 @property (weak, nonatomic) IBOutlet UILabel *trackTitle;
@@ -249,6 +249,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 
 - (void)play {
 	[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+	[[AVAudioSession sharedInstance] setDelegate:self];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
 	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, (__bridge void*)self);
 
@@ -283,6 +284,10 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 			[self play];
 		}
 	}
+}
+
+- (void)beginInterruption {
+	[self pause];
 }
 
 void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, 
