@@ -22,6 +22,8 @@
 #define TIMED_METADATA @"timedMetadata"
 #define RATE @"rate"
 
+#define IMAGE_SIZE 320.0f
+
 #define DEFAULT_RADIO_URL @"http://87.118.78.20:2700/"
 
 
@@ -190,6 +192,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 		self.previousTrackLength = [((NSNumber*)[trackInfo valueForKey:@"duration"]) doubleValue] / 1000;
 		self.albumTitle = [trackInfo valueForKeyPath:@"album.title"];
 		if(albumImageUrl != nil) {
+//			self.trackImage.contentMode = UIViewContentModeScaleAspectFit;
 			[self loadImageWithUrl:albumImageUrl];
 		} else {
 			[self.api getInfoForArtist:normalizedTitle.artist completionHandler:^(NSDictionary *artistInfo, NSError *error) {
@@ -198,9 +201,12 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 				} else {
 					NSString *artistImageUrl = [[[artistInfo valueForKey:@"image"] lastObject] valueForKey:@"#text"];
 					if(artistImageUrl != nil) {
+//						self.trackImage.contentMode = UIViewContentModeScaleAspectFit;
 						[self loadImageWithUrl:artistImageUrl];
 					} else {
-						self.trackImage.image = nil;
+//						self.trackImage.contentMode = UIViewContentModeCenter;
+						self.trackImage.image = nil; // TODO setting 'default' image
+						[self.activityIndicator stopAnimating];
 					}
 				}
 			}];
@@ -224,6 +230,20 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	}];
 }
 
+- (UIImage*)resizeImage:(UIImage*)image {
+	if(image.size.width > IMAGE_SIZE || image.size.height > IMAGE_SIZE) {
+		double ratio = image.size.width / image.size.height;
+		CGSize size = (ratio > 1.0f) ?
+			CGSizeMake(IMAGE_SIZE, IMAGE_SIZE / ratio) :
+			CGSizeMake(IMAGE_SIZE * ratio, IMAGE_SIZE);
+		UIGraphicsBeginImageContext(size);
+		[image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+		image = UIGraphicsGetImageFromCurrentImageContext();
+		UIGraphicsEndImageContext();
+	}
+	return image;
+}
+
 - (void)loadImageWithUrl:(NSString*)imageUrl {
 	NSString *cachesPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
 	NSString *cacheFile = [cachesPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", [imageUrl md5]]];
@@ -235,6 +255,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 		dispatch_async(downloadQueue, ^{
 			NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
 			UIImage *image = [UIImage imageWithData: imageData];
+			image = [self resizeImage:image];
 			[UIImageJPEGRepresentation(image, 85) writeToFile:cacheFile atomically:YES];
 			dispatch_async(dispatch_get_main_queue(), ^{
 				self.trackImage.image = image;
