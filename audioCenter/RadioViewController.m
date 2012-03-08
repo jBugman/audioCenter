@@ -334,8 +334,10 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	
 	[self.api getSessionWithUsername:@"jBugman" password:@"lastfm"
                    completionHandler:^(NSDictionary *session, NSError *error) {
-					   self.sessionKey = [session valueForKey:@"key"];
-					   self.scrobblingStatus.alpha = 1.0f;
+					   if(!error) {
+						   self.sessionKey = [session valueForKey:@"key"];
+						   self.scrobblingStatus.alpha = 1.0f;
+					   }
 				   }];
 	
 	[self processCache];

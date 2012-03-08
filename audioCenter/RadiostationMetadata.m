@@ -20,20 +20,22 @@
 		[request addValue:@"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.66 Safari/535.11" forHTTPHeaderField:@"User-Agent"];
 		
 		NSData *buf = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil]; 
-		NSString *html = [NSString stringWithUTF8String:[buf bytes]];
-		
-		if(html) {
-			NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:
-										  @"Stream Title: </font></td><td><font class=default><b>(.*?)</b>"
-																				   options:NSRegularExpressionCaseInsensitive
-																					 error:nil];
-			NSTextCheckingResult *match = [regex firstMatchInString:html options:0 range:NSMakeRange(0, [html length])];
-			
-			if(!NSEqualRanges(match.range, NSMakeRange(NSNotFound, 0))) {
-				title = [html substringWithRange:[match rangeAtIndex:1]];
-			}
-			if(title) {
-				title = [title stringByReplacingOccurrencesOfString:@" - " withString:@" — "];
+		NSString *html = nil;
+		if(buf) {
+			html = [NSString stringWithUTF8String:[buf bytes]];
+			if(html) {
+				NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:
+											  @"Stream Title: </font></td><td><font class=default><b>(.*?)</b>"
+																					   options:NSRegularExpressionCaseInsensitive
+																						 error:nil];
+				NSTextCheckingResult *match = [regex firstMatchInString:html options:0 range:NSMakeRange(0, [html length])];
+				
+				if(!NSEqualRanges(match.range, NSMakeRange(NSNotFound, 0))) {
+					title = [html substringWithRange:[match rangeAtIndex:1]];
+				}
+				if(title) {
+					title = [title stringByReplacingOccurrencesOfString:@" - " withString:@" — "];
+				}
 			}
 		}
 		dispatch_async(dispatch_get_main_queue(), ^{
