@@ -8,6 +8,10 @@
 
 #import "Settings.h"
 
+#define LASTFM_USERNAME_KEY @"lastFmUsername"
+#define LASTFM_PASSWORD_KEY @"lastFmPassword"
+#define LASTFM_AUTOCORRECT_KEY @"lastFmAutocorrect"
+
 @implementation Settings
 
 static Settings *singleton = nil;
@@ -33,6 +37,15 @@ static Settings *singleton = nil;
 	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+- (BOOL)lastFmIsAutocorrecting {
+	return YES; // TODO 
+//	return [[NSUserDefaults standardUserDefaults] boolForKey:LASTFM_AUTOCORRECT_KEY];
+}
+
+- (void)setLastFmIsAutocorrecting:(BOOL)lastFmIsAutocorrecting {
+	[[NSUserDefaults standardUserDefaults] setBool:lastFmIsAutocorrecting forKey:LASTFM_AUTOCORRECT_KEY];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+}
 
 + (Settings *)sharedInstance {
 	if(!singleton) {

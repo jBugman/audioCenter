@@ -8,13 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-#define LASTFM_USERNAME_KEY @"lastFmUsername"
-#define LASTFM_PASSWORD_KEY @"lastFmPassword"
-
 @interface Settings : NSObject
 
 @property (strong, nonatomic) NSString *lastFmUsername;
 @property (strong, nonatomic) NSString *lastFmPassword;
+@property (assign, nonatomic) BOOL lastFmIsAutocorrecting;
 
 + (Settings*)sharedInstance;
 

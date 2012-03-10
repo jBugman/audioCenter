@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Sergey Parshukov. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface NormalizedTrackTitle : NSObject
 

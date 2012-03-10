@@ -190,59 +190,72 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	[self.titleActivityIndicator stopAnimating];
 	[self.activityIndicator startAnimating];
 
-	[self.api getInfoForTrack:normalizedTitle.trackName artist:normalizedTitle.artist completionHandler:^(NSDictionary *trackInfo, NSError *error) {
-		NSString *albumImageUrl = [[[trackInfo valueForKeyPath:@"album.image"] lastObject] valueForKey:@"#text"];
-		self.previousTrackLength = [((NSNumber*)[trackInfo valueForKey:@"duration"]) doubleValue] / 1000;
-		self.albumTitle = [trackInfo valueForKeyPath:@"album.title"];
-		if(albumImageUrl != nil) {
-//			self.trackImage.contentMode = UIViewContentModeScaleAspectFit;
-			[self loadImageWithUrl:albumImageUrl];
-		} else {
-			[self.api getInfoForArtist:normalizedTitle.artist completionHandler:^(NSDictionary *artistInfo, NSError *error) {
-				if(error) {
-					NSLog(@"getInfoForArtist: %@", error);
-					if(error && error.code == -1009) {
-						self.scrobblingStatus.alpha = 0.2f;
-					}
-				} else {
-					NSString *artistImageUrl = [[[artistInfo valueForKey:@"image"] lastObject] valueForKey:@"#text"];
-					if(artistImageUrl != nil) {
-//						self.trackImage.contentMode = UIViewContentModeScaleAspectFit;
-						[self loadImageWithUrl:artistImageUrl];
-					} else {
-//						self.trackImage.contentMode = UIViewContentModeCenter;
-						self.trackImage.image = nil; // TODO setting 'default' image
-						[self.activityIndicator stopAnimating];
-					}
-				}
-			}];
-		}
-	}];
-	if(self.previousTrack != nil && normalizedTitle != self.previousTrack) {
+	NSLog(@"Raw track info:\n%@", normalizedTitle);
+	if(self.previousTrack != nil && ![normalizedTitle isEqualToTitle:self.previousTrack]) {
 		NSTimeInterval deltaT = [[NSDate date] timeIntervalSince1970] - self.previousTrackStartTime;
 		if((self.previousTrackLength > 0 && deltaT > self.previousTrackLength / 2) || deltaT > 240) { //Cкробблинг с 50% или 4 минут
 			if(self.sessionKey) {
 				[self.api scrobbleTrack:self.previousTrack.trackName artist:self.previousTrack.artist
 							  timestamp:[[NSDate date] timeIntervalSince1970]
 							 sessionKey:self.sessionKey completionHandler:^(NSError *error) {
-					NSLog(@"scrobbleTrack: %@", error);
+								 NSLog(@"scrobbleTrack: %@", error);
+								 if(error && error.code == -1009) {
+									 self.scrobblingStatus.alpha = 0.2f;
+								 }
+							 }];
+			}
+		}
+	}
+	self.previousTrack = normalizedTitle;
+	self.previousTrackStartTime = [[NSDate date] timeIntervalSince1970];
+	
+	[self.api getInfoForTrack:normalizedTitle.trackName artist:normalizedTitle.artist autocorrection:[Settings sharedInstance].lastFmIsAutocorrecting completionHandler:^(NSDictionary *trackInfo, NSError *error) {
+		if(error) {
+			NSLog(@"getInfoForTrack: %@", error);
+		} else {
+			if([Settings sharedInstance].lastFmIsAutocorrecting) {
+				normalizedTitle.trackName = [trackInfo valueForKey:@"name"];
+				normalizedTitle.artist = [trackInfo valueForKeyPath:@"artist.name"];
+				self.trackArtist.text = normalizedTitle.artist;
+				self.trackTitle.text = normalizedTitle.trackName;
+				self.previousTrack.artist = normalizedTitle.artist;
+				self.previousTrack.trackName = normalizedTitle.trackName;
+				NSLog(@"Autocorrected:\n%@", normalizedTitle);
+			}
+			NSString *albumImageUrl = [[[trackInfo valueForKeyPath:@"album.image"] lastObject] valueForKey:@"#text"];
+			self.previousTrackLength = [((NSNumber*)[trackInfo valueForKey:@"duration"]) doubleValue] / 1000;
+			self.albumTitle = [trackInfo valueForKeyPath:@"album.title"];
+			if(albumImageUrl != nil) {
+				[self loadImageWithUrl:albumImageUrl];
+			} else {
+				[self.api getInfoForArtist:normalizedTitle.artist completionHandler:^(NSDictionary *artistInfo, NSError *error) {
+					if(error) {
+						NSLog(@"getInfoForArtist: %@", error);
+						if(error && error.code == -1009) {
+							self.scrobblingStatus.alpha = 0.2f;
+						}
+					} else {
+						NSString *artistImageUrl = [[[artistInfo valueForKey:@"image"] lastObject] valueForKey:@"#text"];
+						if(artistImageUrl != nil) {
+							[self loadImageWithUrl:artistImageUrl];
+						} else {
+							self.trackImage.image = nil; // TODO setting 'default' image
+							[self.activityIndicator stopAnimating];
+						}
+					}
+				}];
+			}
+
+			if(self.sessionKey) {
+				[self.api updateNowPlayingTrack:normalizedTitle.trackName artist:normalizedTitle.artist sessionKey:self.sessionKey completionHandler:^(NSError *error) {
+					NSLog(@"updateNowPlayingTrack: %@", error);
 					if(error && error.code == -1009) {
 						self.scrobblingStatus.alpha = 0.2f;
 					}
 				}];
 			}
 		}
-	}
-	self.previousTrack = normalizedTitle;
-	self.previousTrackStartTime = [[NSDate date] timeIntervalSince1970];
-	if(self.sessionKey) {
-		[self.api updateNowPlayingTrack:normalizedTitle.trackName artist:normalizedTitle.artist sessionKey:self.sessionKey completionHandler:^(NSError *error) {
-			NSLog(@"updateNowPlayingTrack: %@", error);
-			if(error && error.code == -1009) {
-				self.scrobblingStatus.alpha = 0.2f;
-			}
-		}];
-	}
+	}];
 }
 
 - (UIImage*)resizeImage:(UIImage*)image {
@@ -397,8 +410,6 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	
 	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
-	
-	[self auth];
 	
 	[self processCache];
 }
