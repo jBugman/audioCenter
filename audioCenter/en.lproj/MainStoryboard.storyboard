@@ -42,7 +42,7 @@
                             <label opaque="NO" clipsSubviews="YES" alpha="0.90000000000000002" contentMode="left" text="Station Title" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="13" id="jq4-w4-bbM" userLabel="Station Title">
                                 <rect key="frame" x="8" y="396" width="304" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <color key="highlightedColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </label>
@@ -80,7 +80,7 @@
                             <rect key="frame" x="62" y="1" width="203" height="43"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Artist" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="mj5-8l-Pm7" userLabel="Track Artist">
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Artist" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="11" id="mj5-8l-Pm7" userLabel="Track Artist">
                                     <rect key="frame" x="0.0" y="0.0" width="203" height="16"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -88,14 +88,14 @@
                                     <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 </label>
-                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Title" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="NeB-Ti-Lb4" userLabel="Track Title">
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Title" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="11" id="NeB-Ti-Lb4" userLabel="Track Title">
                                     <rect key="frame" x="0.0" y="10" width="203" height="20"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="13"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 </label>
-                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Album" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="Xo1-gD-exE" userLabel="Album Title">
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Album" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="11" id="Xo1-gD-exE" userLabel="Album Title">
                                     <rect key="frame" x="0.5" y="23" width="203" height="20"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="13"/>
