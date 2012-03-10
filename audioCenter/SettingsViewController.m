@@ -29,7 +29,7 @@
 @synthesize authorizationSpinner;
 
 - (void)auth {
-	if([Settings sharedInstance].lastFmUsername && [Settings sharedInstance].lastFmPassword) {
+	if([Settings sharedInstance].lastFmUsername.length && [Settings sharedInstance].lastFmPassword.length) {
 		[self.authorizationSpinner startAnimating];
 		self.authorizationStatus.text = nil;
 		LastFmAPI *lastFm = [[LastFmAPI alloc] init];
@@ -46,6 +46,8 @@
 						 }
 						 [self.authorizationSpinner stopAnimating];
 					 }];
+	} else {
+		self.authorizationStatus.text = @"No";
 	}
 }
 

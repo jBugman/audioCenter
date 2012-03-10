@@ -221,24 +221,28 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	if(self.previousTrack != nil && normalizedTitle != self.previousTrack) {
 		NSTimeInterval deltaT = [[NSDate date] timeIntervalSince1970] - self.previousTrackStartTime;
 		if((self.previousTrackLength > 0 && deltaT > self.previousTrackLength / 2) || deltaT > 240) { //Cкробблинг с 50% или 4 минут
-			[self.api scrobbleTrack:self.previousTrack.trackName artist:self.previousTrack.artist
-						  timestamp:[[NSDate date] timeIntervalSince1970]
-						 sessionKey:self.sessionKey completionHandler:^(NSError *error) {
-				NSLog(@"scrobbleTrack: %@", error);
-				if(error && error.code == -1009) {
-					self.scrobblingStatus.alpha = 0.2f;
-				}
-			}];
+			if(self.sessionKey) {
+				[self.api scrobbleTrack:self.previousTrack.trackName artist:self.previousTrack.artist
+							  timestamp:[[NSDate date] timeIntervalSince1970]
+							 sessionKey:self.sessionKey completionHandler:^(NSError *error) {
+					NSLog(@"scrobbleTrack: %@", error);
+					if(error && error.code == -1009) {
+						self.scrobblingStatus.alpha = 0.2f;
+					}
+				}];
+			}
 		}
 	}
 	self.previousTrack = normalizedTitle;
 	self.previousTrackStartTime = [[NSDate date] timeIntervalSince1970];
-	[self.api updateNowPlayingTrack:normalizedTitle.trackName artist:normalizedTitle.artist sessionKey:self.sessionKey completionHandler:^(NSError *error) {
-		NSLog(@"updateNowPlayingTrack: %@", error);
-		if(error && error.code == -1009) {
-			self.scrobblingStatus.alpha = 0.2f;
-		}
-	}];
+	if(self.sessionKey) {
+		[self.api updateNowPlayingTrack:normalizedTitle.trackName artist:normalizedTitle.artist sessionKey:self.sessionKey completionHandler:^(NSError *error) {
+			NSLog(@"updateNowPlayingTrack: %@", error);
+			if(error && error.code == -1009) {
+				self.scrobblingStatus.alpha = 0.2f;
+			}
+		}];
+	}
 }
 
 - (UIImage*)resizeImage:(UIImage*)image {
@@ -356,8 +360,9 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 }
 
 - (void) auth {
+	self.sessionKey = nil;
 	self.scrobblingStatus.alpha = 0.2f;
-	if([Settings sharedInstance].lastFmUsername && [Settings sharedInstance].lastFmPassword) {
+	if([Settings sharedInstance].lastFmUsername.length && [Settings sharedInstance].lastFmPassword.length) {
 		[self.scrobblingSpinner startAnimating];
 		self.scrobblingStatus.hidden = YES;
 		[self.api getSessionWithUsername:[Settings sharedInstance].lastFmUsername password:[Settings sharedInstance].lastFmPassword
@@ -379,7 +384,9 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-	[self auth];
+	if(!self.sessionKey) {
+		[self auth];
+	}
 }
 
 - (void)viewDidLoad {
