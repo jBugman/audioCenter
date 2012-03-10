@@ -23,7 +23,8 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *authorizationSpinner;
 
 - (void)auth;
-- (void)processCache;
+- (void)getImageCacheSize;
+- (void)dropImageCache;
 
 @end
 
@@ -45,7 +46,7 @@
 	self.lastFmPassword.text = [Settings sharedInstance].lastFmPassword;
 	self.autocorrectionSwitch.on = [Settings sharedInstance].lastFmAutocorrect;
 	self.scrobblingSwitch.on = [Settings sharedInstance].lastFmScrobbling;
-	[self processCache];
+	[self getImageCacheSize];
 	[self auth];
 	
 	self.versionString.text = [@"Version " stringByAppendingString:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
@@ -68,6 +69,26 @@
 
 - (IBAction)scrobblingSwitched:(UISwitch *)sender {
 	[Settings sharedInstance].lastFmScrobbling = sender.on;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return (indexPath.section == 1 && indexPath.row == 1); // Только для строки с размером кеша
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
+	if(indexPath.section == 1 && indexPath.row == 1) {
+		return @"Clear";
+	} else {
+		return @"Delete";
+	}
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if(editingStyle == UITableViewCellEditingStyleDelete) {
+        NSLog(@"Delete pressed");
+		self.cacheSize.text = @"Empty";
+		[self dropImageCache];
+    }
 }
 
 - (void)auth {
@@ -93,8 +114,8 @@
 	}
 }
 
-- (void)processCache {
-	dispatch_queue_t queue = dispatch_queue_create("settings", NULL);
+- (void)getImageCacheSize {
+	dispatch_queue_t queue = dispatch_queue_create("imageCache", NULL);
 	dispatch_async(queue, ^{
 		NSString *cachesPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
 		NSArray *files = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:cachesPath error:nil] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.jpg'"]];
@@ -105,8 +126,20 @@
 		}
 		totalSize /= 1024;
 		dispatch_async(dispatch_get_main_queue(), ^{
-			self.cacheSize.text = (totalSize) ? [NSString stringWithFormat:@"%@K", [NSNumber numberWithLong:totalSize]] : @"0";
+			self.cacheSize.text = (totalSize) ? [NSString stringWithFormat:@"%@K", [NSNumber numberWithLong:totalSize]] : @"Empty";
 		});
+	});
+	dispatch_release(queue);
+}
+
+- (void)dropImageCache {
+	dispatch_queue_t queue = dispatch_queue_create("imageCache", NULL);
+	dispatch_async(queue, ^{
+		NSString *cachesPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+		NSArray *files = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:cachesPath error:nil] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.jpg'"]];
+		for(NSString* fileName in files) {
+			[[NSFileManager defaultManager] removeItemAtPath:[cachesPath stringByAppendingPathComponent:fileName] error:nil];
+		}
 	});
 	dispatch_release(queue);
 }
