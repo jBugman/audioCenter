@@ -353,7 +353,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
 	
-	[self.api getSessionWithUsername:@"jBugman" password:@"lastfm"
+	[self.api getSessionWithUsername:[Settings sharedInstance].lastFmUsername password:[Settings sharedInstance].lastFmPassword
                    completionHandler:^(NSDictionary *session, NSError *error) {
 					   if(!error) {
 						   self.sessionKey = [session valueForKey:@"key"];

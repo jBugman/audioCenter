@@ -20,6 +20,10 @@
 		F321FABB14F843FF0021E3BC /* NSString+md5.m in Sources */ = {isa = PBXBuildFile; fileRef = F321FABA14F843FE0021E3BC /* NSString+md5.m */; };
 		F339F3A3150550A100019335 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F339F3A1150550A100019335 /* Icon.png */; };
 		F339F3A61505596800019335 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F339F3A51505596800019335 /* AudioToolbox.framework */; };
+		F348D9D0150B737100618A0E /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = F348D9CE150B737100618A0E /* settings.png */; };
+		F348D9D1150B737100618A0E /* settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F348D9CF150B737100618A0E /* settings@2x.png */; };
+		F348D9D5150B76CC00618A0E /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F348D9D4150B76CC00618A0E /* SettingsViewController.m */; };
+		F348D9D8150B7C1F00618A0E /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = F348D9D7150B7C1F00618A0E /* Settings.m */; };
 		F36A2D351506B63E00B8D97C /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F36A2D341506B63E00B8D97C /* CoreMedia.framework */; };
 		F3721EED14F8E8D200AB5A5B /* NormalizedTrackTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = F3721EEC14F8E8D200AB5A5B /* NormalizedTrackTitle.m */; };
 		F37468FC14FAB1EE00C6D165 /* listIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = F37468FB14FAB1EE00C6D165 /* listIcon.png */; };
@@ -56,6 +60,12 @@
 		F321FABA14F843FE0021E3BC /* NSString+md5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+md5.m"; sourceTree = "<group>"; };
 		F339F3A1150550A100019335 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		F339F3A51505596800019335 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		F348D9CE150B737100618A0E /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
+		F348D9CF150B737100618A0E /* settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings@2x.png"; sourceTree = "<group>"; };
+		F348D9D3150B76CC00618A0E /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		F348D9D4150B76CC00618A0E /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		F348D9D6150B7C1F00618A0E /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
+		F348D9D7150B7C1F00618A0E /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		F36A2D341506B63E00B8D97C /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		F3721EEB14F8E8D200AB5A5B /* NormalizedTrackTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NormalizedTrackTitle.h; sourceTree = "<group>"; };
 		F3721EEC14F8E8D200AB5A5B /* NormalizedTrackTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NormalizedTrackTitle.m; sourceTree = "<group>"; };
@@ -129,6 +139,10 @@
 				F321FA9414F808920021E3BC /* MainStoryboard.storyboard */,
 				F321FA9714F808920021E3BC /* RadioViewController.h */,
 				F321FA9814F808920021E3BC /* RadioViewController.m */,
+				F348D9D3150B76CC00618A0E /* SettingsViewController.h */,
+				F348D9D4150B76CC00618A0E /* SettingsViewController.m */,
+				F348D9D6150B7C1F00618A0E /* Settings.h */,
+				F348D9D7150B7C1F00618A0E /* Settings.m */,
 				F3BCFA4514FACB07001C6EFF /* RadiostationListViewController.h */,
 				F3BCFA4614FACB07001C6EFF /* RadiostationListViewController.m */,
 				F321FAB614F841A20021E3BC /* LastFmAPI.h */,
@@ -169,6 +183,8 @@
 				F374690A14FAB6B600C6D165 /* playIcon@2x.png */,
 				F374690514FAB6AE00C6D165 /* bottomBarTexture.png */,
 				F374690614FAB6AE00C6D165 /* bottomBarTexture@2x.png */,
+				F348D9CE150B737100618A0E /* settings.png */,
+				F348D9CF150B737100618A0E /* settings@2x.png */,
 			);
 			path = assets;
 			sourceTree = "<group>";
@@ -237,6 +253,8 @@
 				F374690C14FAB6B600C6D165 /* playIcon@2x.png in Resources */,
 				F3BCFA4A14FAD958001C6EFF /* as.png in Resources */,
 				F339F3A3150550A100019335 /* Icon.png in Resources */,
+				F348D9D0150B737100618A0E /* settings.png in Resources */,
+				F348D9D1150B737100618A0E /* settings@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,6 +289,8 @@
 				F3721EED14F8E8D200AB5A5B /* NormalizedTrackTitle.m in Sources */,
 				F3BCFA4714FACB07001C6EFF /* RadiostationListViewController.m in Sources */,
 				F3A5509015094BA400BBEEBA /* RadiostationMetadata.m in Sources */,
+				F348D9D5150B76CC00618A0E /* SettingsViewController.m in Sources */,
+				F348D9D8150B7C1F00618A0E /* Settings.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

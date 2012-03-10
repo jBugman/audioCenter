@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "LastFmAPI.h"
+#import "Settings.h"
 
 @interface RadioViewController : UIViewController
 
