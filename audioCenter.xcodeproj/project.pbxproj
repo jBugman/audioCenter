@@ -200,7 +200,7 @@
 		F321FA7514F808920021E3BC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 				ORGANIZATIONNAME = Gizbo.ru;
 			};
 			buildConfigurationList = F321FA7814F808920021E3BC /* Build configuration list for PBXProject "audioCenter" */;
