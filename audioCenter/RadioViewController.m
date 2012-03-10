@@ -197,7 +197,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 		} else {
 			[self.api getInfoForArtist:normalizedTitle.artist completionHandler:^(NSDictionary *artistInfo, NSError *error) {
 				if(error) {
-					NSLog(@"error: %@", error);
+					NSLog(@"getInfoForArtist: %@", error);
 				} else {
 					NSString *artistImageUrl = [[[artistInfo valueForKey:@"image"] lastObject] valueForKey:@"#text"];
 					if(artistImageUrl != nil) {
@@ -214,19 +214,18 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	}];
 	if(self.previousTrack != nil && normalizedTitle != self.previousTrack) {
 		NSTimeInterval deltaT = [[NSDate date] timeIntervalSince1970] - self.previousTrackStartTime;
-		NSLog(@"dT %f %f", deltaT, self.previousTrackLength);
 		if((self.previousTrackLength > 0 && deltaT > self.previousTrackLength / 2) || deltaT > 240) { //Cкробблинг с 50% или 4 минут
 			[self.api scrobbleTrack:self.previousTrack.trackName artist:self.previousTrack.artist
 						  timestamp:[[NSDate date] timeIntervalSince1970]
 						 sessionKey:self.sessionKey completionHandler:^(NSError *error) {
-				NSLog(@"%@", error);
+				NSLog(@"scrobbleTrack: %@", error);
 			}];
 		}
 	}
 	self.previousTrack = normalizedTitle;
 	self.previousTrackStartTime = [[NSDate date] timeIntervalSince1970];
 	[self.api updateNowPlayingTrack:normalizedTitle.trackName artist:normalizedTitle.artist sessionKey:self.sessionKey completionHandler:^(NSError *error) {
-		NSLog(@"%@", error);
+		NSLog(@"updateNowPlayingTrack: %@", error);
 	}];
 }
 
@@ -353,13 +352,15 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
 	
-	[self.api getSessionWithUsername:[Settings sharedInstance].lastFmUsername password:[Settings sharedInstance].lastFmPassword
-                   completionHandler:^(NSDictionary *session, NSError *error) {
-					   if(!error) {
-						   self.sessionKey = [session valueForKey:@"key"];
-						   self.scrobblingStatus.alpha = 1.0f;
-					   }
-				   }];
+	if([Settings sharedInstance].lastFmUsername && [Settings sharedInstance].lastFmPassword) {
+		[self.api getSessionWithUsername:[Settings sharedInstance].lastFmUsername password:[Settings sharedInstance].lastFmPassword
+					   completionHandler:^(NSDictionary *session, NSError *error) {
+						   if(!error) {
+							   self.sessionKey = [session valueForKey:@"key"];
+							   self.scrobblingStatus.alpha = 1.0f;
+						   }
+					   }];
+	}
 	
 	[self processCache];
 }

@@ -8,38 +8,29 @@
 
 #import "Settings.h"
 
-#define DEBUG_USERNAME @"jBugman"
-#define DEBUG_PASSWORD @"lastfm"
-
 @implementation Settings
 
 static Settings *singleton = nil;
 
 - (NSString*)lastFmUsername {
 	NSString* value = [[NSUserDefaults standardUserDefaults] stringForKey:LASTFM_USERNAME_KEY];
-	if(!value) {
-		value = DEBUG_USERNAME;
-		self.lastFmUsername = value;
-	}
 	return value;
 }
 
 - (void)setLastFmUsername:(NSString *)lastFmUsername {
 	[[NSUserDefaults standardUserDefaults] setValue:lastFmUsername forKey:LASTFM_USERNAME_KEY];
+	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 
 - (NSString*)lastFmPassword {
 	NSString* value = [[NSUserDefaults standardUserDefaults] stringForKey:LASTFM_PASSWORD_KEY];
-	if(!value) {
-		value = DEBUG_PASSWORD;
-		self.lastFmPassword = value;
-	}
 	return value;
 }
 
 - (void)setLastFmPassword:(NSString *)lastFmPassword {
 	[[NSUserDefaults standardUserDefaults] setValue:lastFmPassword forKey:LASTFM_PASSWORD_KEY];
+	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 
