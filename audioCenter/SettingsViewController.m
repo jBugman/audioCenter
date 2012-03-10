@@ -62,6 +62,9 @@
 
 - (IBAction)fieldEdited:(UITextField *)sender {
 	[sender resignFirstResponder];
+	if(sender == self.lastFmUsername && !self.lastFmPassword.text.length) {
+		[self.lastFmPassword becomeFirstResponder];
+	}
 	[Settings sharedInstance].lastFmUsername = self.lastFmUsername.text;
 	[Settings sharedInstance].lastFmPassword = self.lastFmPassword.text;
 	[self auth];

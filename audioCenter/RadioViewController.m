@@ -37,7 +37,9 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *titleActivityIndicator;
 @property (weak, nonatomic) IBOutlet UILabel *stationTitle;
-@property (weak, nonatomic) IBOutlet UIImageView *scrobblingStatus;
+
+@property (weak, nonatomic) IBOutlet UIButton *scrobblingStatus;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *scrobblingSpinner;
 
 
 @property (strong, nonatomic) NSURL *radioUrl;
@@ -72,6 +74,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 @synthesize trackArtist = _trackArtist, trackTitle = _trackTitle;
 @synthesize scrobblingStatus = _scrobblingStatus, stationTitle = _stationTitle;
 @synthesize radio = _radio, isPlaying = _isPlaying, wasInterrupted = _wasInterrupted;
+@synthesize scrobblingSpinner = _scrobblingSpinner;
 @synthesize radioUrl = _radioUrl;
 @synthesize api = _api;
 @synthesize sessionKey = _sessionKey;
@@ -198,6 +201,9 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 			[self.api getInfoForArtist:normalizedTitle.artist completionHandler:^(NSDictionary *artistInfo, NSError *error) {
 				if(error) {
 					NSLog(@"getInfoForArtist: %@", error);
+					if(error && error.code == -1009) {
+						self.scrobblingStatus.alpha = 0.2f;
+					}
 				} else {
 					NSString *artistImageUrl = [[[artistInfo valueForKey:@"image"] lastObject] valueForKey:@"#text"];
 					if(artistImageUrl != nil) {
@@ -219,6 +225,9 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 						  timestamp:[[NSDate date] timeIntervalSince1970]
 						 sessionKey:self.sessionKey completionHandler:^(NSError *error) {
 				NSLog(@"scrobbleTrack: %@", error);
+				if(error && error.code == -1009) {
+					self.scrobblingStatus.alpha = 0.2f;
+				}
 			}];
 		}
 	}
@@ -226,6 +235,9 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	self.previousTrackStartTime = [[NSDate date] timeIntervalSince1970];
 	[self.api updateNowPlayingTrack:normalizedTitle.trackName artist:normalizedTitle.artist sessionKey:self.sessionKey completionHandler:^(NSError *error) {
 		NSLog(@"updateNowPlayingTrack: %@", error);
+		if(error && error.code == -1009) {
+			self.scrobblingStatus.alpha = 0.2f;
+		}
 	}];
 }
 
@@ -343,6 +355,33 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	}
 }
 
+- (void) auth {
+	self.scrobblingStatus.alpha = 0.2f;
+	if([Settings sharedInstance].lastFmUsername && [Settings sharedInstance].lastFmPassword) {
+		[self.scrobblingSpinner startAnimating];
+		self.scrobblingStatus.hidden = YES;
+		[self.api getSessionWithUsername:[Settings sharedInstance].lastFmUsername password:[Settings sharedInstance].lastFmPassword
+					   completionHandler:^(NSDictionary *session, NSError *error) {
+						   if(!error) {
+							   self.sessionKey = [session valueForKey:@"key"];
+							   self.scrobblingStatus.alpha = 1.0f;
+						   } else {
+							   self.scrobblingStatus.alpha = 0.2f;
+						   }
+						   self.scrobblingStatus.hidden = NO;
+						   [self.scrobblingSpinner stopAnimating];
+					   }];
+	}
+}
+
+- (IBAction)updateAuth {
+	[self auth];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	[self auth];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -352,15 +391,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
 	
-	if([Settings sharedInstance].lastFmUsername && [Settings sharedInstance].lastFmPassword) {
-		[self.api getSessionWithUsername:[Settings sharedInstance].lastFmUsername password:[Settings sharedInstance].lastFmPassword
-					   completionHandler:^(NSDictionary *session, NSError *error) {
-						   if(!error) {
-							   self.sessionKey = [session valueForKey:@"key"];
-							   self.scrobblingStatus.alpha = 1.0f;
-						   }
-					   }];
-	}
+	[self auth];
 	
 	[self processCache];
 }
@@ -378,6 +409,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	self.activityIndicator = nil;
 	self.titleActivityIndicator = nil;
 	self.albumTitle = nil;
+	[self setScrobblingSpinner:nil];
     [super viewDidUnload];
 }
 

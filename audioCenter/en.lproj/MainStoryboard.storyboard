@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11D50b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="JwI-ur-4tx">
     <dependencies>
-        <deployment defaultVersion="1296" identifier="iOS"/>
         <development defaultVersion="4200" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1179"/>
     </dependencies>
@@ -61,14 +60,29 @@
                                     <action selector="playPauseTap:" destination="2" eventType="touchUpInside" id="zGL-mL-U0v"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="scaleToFill" image="as.png" id="w4S-wr-Pal" userLabel="Scrobbling Status">
-                                <rect key="frame" x="8" y="328" width="31" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="orA-Gt-bmh">
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="orA-Gt-bmh" userLabel="Cover Image Spinner">
                                 <rect key="frame" x="143" y="140" width="37" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="white" id="ozH-kX-quO" userLabel="Auth Spinner">
+                                <rect key="frame" x="14" y="328" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Wbt-NJ-NpJ" userLabel="Scrobbling Status">
+                                <rect key="frame" x="8" y="327" width="31" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" image="as.png">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="updateAuth" destination="2" eventType="touchUpInside" id="sOp-MM-bbL"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.095726415940000004" green="1" blue="0.22992270249999999" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
@@ -131,7 +145,8 @@
                         <outlet property="activityIndicator" destination="orA-Gt-bmh" id="Lfd-IA-r78"/>
                         <outlet property="albumTitleLabel" destination="Xo1-gD-exE" id="SP7-BF-4Ha"/>
                         <outlet property="playPauseButton" destination="vYU-px-Tkf" id="SCU-lY-Sap"/>
-                        <outlet property="scrobblingStatus" destination="w4S-wr-Pal" id="CV6-Ze-ieO"/>
+                        <outlet property="scrobblingSpinner" destination="ozH-kX-quO" id="mJU-ld-Zbj"/>
+                        <outlet property="scrobblingStatus" destination="Wbt-NJ-NpJ" id="ffL-Ny-pOy"/>
                         <outlet property="stationTitle" destination="jq4-w4-bbM" id="1L5-sq-YhC"/>
                         <outlet property="titleActivityIndicator" destination="3MN-yX-rDJ" id="3OD-97-6jU"/>
                         <outlet property="trackArtist" destination="mj5-8l-Pm7" id="dNc-ao-w94"/>
@@ -214,7 +229,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="textColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next"/>
                                                     <connections>
                                                         <action selector="fieldEdited:" destination="Udz-Cl-jfV" eventType="editingDidEndOnExit" id="lkE-jo-Gp2"/>
                                                     </connections>
@@ -242,7 +257,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="textColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" secureTextEntry="YES"/>
                                                     <connections>
                                                         <action selector="fieldEdited:" destination="Udz-Cl-jfV" eventType="editingDidEndOnExit" id="yee-bk-9zA"/>
                                                     </connections>
@@ -368,7 +383,8 @@
                 <relationship kind="outlet" name="activityIndicator" candidateClass="UIActivityIndicatorView"/>
                 <relationship kind="outlet" name="albumTitleLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="playPauseButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="scrobblingStatus" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="scrobblingSpinner" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="scrobblingStatus" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="stationTitle" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="titleActivityIndicator" candidateClass="UIActivityIndicatorView"/>
                 <relationship kind="outlet" name="trackArtist" candidateClass="UILabel"/>
@@ -382,6 +398,7 @@
         <class className="SettingsViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/SettingsViewController.h"/>
             <relationships>
+                <relationship kind="outlet" name="authorizationSpinner" candidateClass="UIActivityIndicatorView"/>
                 <relationship kind="outlet" name="authorizationStatus" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="buildString" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="lastFmPassword" candidateClass="UITextField"/>
