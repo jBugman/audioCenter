@@ -56,6 +56,14 @@
 	return 1;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+	if(section == 0) {
+		return @"Custom stations";
+	} else {
+		return nil;
+	}
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	if(section == 0) {
 		return [self.stationsList count];

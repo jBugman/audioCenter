@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11D50b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="JwI-ur-4tx">
     <dependencies>
-        <deployment defaultVersion="1296" identifier="iOS"/>
         <development defaultVersion="4200" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1179"/>
     </dependencies>
@@ -163,20 +162,20 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G64-z6-fHs" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController title="Stations" id="zER-JB-tG2" customClass="RadiostationListViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Wav-pu-xxN">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Wav-pu-xxN">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="plainCell" textLabel="K1J-wc-nWO" style="IBUITableViewCellStyleDefault" id="X5n-Hw-SlI">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="46" width="320" height="46"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <rect key="frame" x="10" y="1" width="300" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="K1J-wc-nWO">
-                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <rect key="frame" x="10" y="0.0" width="280" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -194,7 +193,7 @@
                             <outlet property="delegate" destination="zER-JB-tG2" id="sv8-7j-xII"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="Yy5-G5-FsI"/>
+                    <navigationItem key="navigationItem" title="Radiostations" id="Yy5-G5-FsI"/>
                 </tableViewController>
             </objects>
             <point key="canvasLocation" x="-944" y="-417"/>
@@ -410,7 +409,7 @@
                             <outlet property="delegate" destination="Udz-Cl-jfV" id="XHH-H3-qpv"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="RT4-uJ-cqK"/>
+                    <navigationItem key="navigationItem" title="Settings" id="RT4-uJ-cqK"/>
                     <connections>
                         <outlet property="authorizationSpinner" destination="1mo-M8-3d0" id="qv5-k3-htV"/>
                         <outlet property="authorizationStatus" destination="Fcp-9r-wtR" id="r6N-kF-scm"/>
