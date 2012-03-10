@@ -20,6 +20,7 @@
 		F321FABB14F843FF0021E3BC /* NSString+md5.m in Sources */ = {isa = PBXBuildFile; fileRef = F321FABA14F843FE0021E3BC /* NSString+md5.m */; };
 		F339F3A3150550A100019335 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F339F3A1150550A100019335 /* Icon.png */; };
 		F339F3A61505596800019335 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F339F3A51505596800019335 /* AudioToolbox.framework */; };
+		F3418E8C150BF6BE0091BF7E /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = F3418E8B150BF6BE0091BF7E /* Defaults.plist */; };
 		F348D9D0150B737100618A0E /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = F348D9CE150B737100618A0E /* settings.png */; };
 		F348D9D1150B737100618A0E /* settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F348D9CF150B737100618A0E /* settings@2x.png */; };
 		F348D9D5150B76CC00618A0E /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F348D9D4150B76CC00618A0E /* SettingsViewController.m */; };
@@ -61,6 +62,7 @@
 		F321FABA14F843FE0021E3BC /* NSString+md5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+md5.m"; sourceTree = "<group>"; };
 		F339F3A1150550A100019335 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		F339F3A51505596800019335 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		F3418E8B150BF6BE0091BF7E /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Defaults.plist; sourceTree = "<group>"; };
 		F348D9CE150B737100618A0E /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 		F348D9CF150B737100618A0E /* settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings@2x.png"; sourceTree = "<group>"; };
 		F348D9D3150B76CC00618A0E /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 				F321FA8B14F808920021E3BC /* InfoPlist.strings */,
 				F321FA8E14F808920021E3BC /* main.m */,
 				F321FA9014F808920021E3BC /* audioCenter-Prefix.pch */,
+				F3418E8B150BF6BE0091BF7E /* Defaults.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 				F348D9D0150B737100618A0E /* settings.png in Resources */,
 				F348D9D1150B737100618A0E /* settings@2x.png in Resources */,
 				F348D9DD150BAE6900618A0E /* as@2x.png in Resources */,
+				F3418E8C150BF6BE0091BF7E /* Defaults.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

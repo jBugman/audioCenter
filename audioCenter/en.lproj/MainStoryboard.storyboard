@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11D50b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="JwI-ur-4tx">
     <dependencies>
+        <deployment defaultVersion="1296" identifier="iOS"/>
         <development defaultVersion="4200" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1179"/>
     </dependencies>
@@ -287,8 +288,8 @@
                                                     <color key="textColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="1mo-M8-3d0">
-                                                    <rect key="frame" x="253" y="3" width="37" height="37"/>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="white" id="1mo-M8-3d0">
+                                                    <rect key="frame" x="270" y="12" width="20" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="color" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                 </activityIndicatorView>
@@ -296,7 +297,7 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                     </tableViewCell>
-                                    <tableViewCell userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Ac5-cm-tev">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Ac5-cm-tev">
                                         <rect key="frame" x="0.0" y="179" width="320" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -310,9 +311,12 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="vVy-rQ-B34">
+                                                <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="vVy-rQ-B34">
                                                     <rect key="frame" x="211" y="8" width="79" height="27"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <connections>
+                                                        <action selector="autocorrectionSwitched:" destination="Udz-Cl-jfV" eventType="valueChanged" id="pUD-li-C07"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -359,6 +363,7 @@
                     <connections>
                         <outlet property="authorizationSpinner" destination="1mo-M8-3d0" id="qv5-k3-htV"/>
                         <outlet property="authorizationStatus" destination="Fcp-9r-wtR" id="r6N-kF-scm"/>
+                        <outlet property="autocorrectionSwitch" destination="vVy-rQ-B34" id="Mar-5x-ZTi"/>
                         <outlet property="buildString" destination="tGy-gs-oMe" id="sOF-7s-dgb"/>
                         <outlet property="lastFmPassword" destination="2HU-pb-icQ" id="Lpr-KP-OTy"/>
                         <outlet property="lastFmUsername" destination="E2S-yw-JSw" id="anE-lf-EN2"/>
@@ -400,6 +405,7 @@
             <relationships>
                 <relationship kind="outlet" name="authorizationSpinner" candidateClass="UIActivityIndicatorView"/>
                 <relationship kind="outlet" name="authorizationStatus" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="autocorrectionSwitch" candidateClass="UISwitch"/>
                 <relationship kind="outlet" name="buildString" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="lastFmPassword" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="lastFmUsername" candidateClass="UITextField"/>

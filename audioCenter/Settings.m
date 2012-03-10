@@ -38,8 +38,7 @@ static Settings *singleton = nil;
 }
 
 - (BOOL)lastFmIsAutocorrecting {
-	return YES; // TODO 
-//	return [[NSUserDefaults standardUserDefaults] boolForKey:LASTFM_AUTOCORRECT_KEY];
+	return [[NSUserDefaults standardUserDefaults] boolForKey:LASTFM_AUTOCORRECT_KEY];
 }
 
 - (void)setLastFmIsAutocorrecting:(BOOL)lastFmIsAutocorrecting {
@@ -50,6 +49,8 @@ static Settings *singleton = nil;
 + (Settings *)sharedInstance {
 	if(!singleton) {
 		singleton = [[Settings alloc] init];
+		NSString* path = [[NSBundle mainBundle] pathForResource:@"Defaults" ofType:@"plist"];
+		[[NSUserDefaults standardUserDefaults] registerDefaults: [NSDictionary dictionaryWithContentsOfFile: path]];
 	}
 	return singleton;
 }

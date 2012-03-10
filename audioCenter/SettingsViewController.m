@@ -16,8 +16,12 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *lastFmUsername;
 @property (weak, nonatomic) IBOutlet UITextField *lastFmPassword;
+@property (weak, nonatomic) IBOutlet UISwitch *autocorrectionSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *authorizationStatus;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *authorizationSpinner;
+
+- (void)auth;
+
 @end
 
 @implementation SettingsViewController
@@ -25,8 +29,35 @@
 @synthesize buildString;
 @synthesize lastFmUsername;
 @synthesize lastFmPassword;
+@synthesize autocorrectionSwitch;
 @synthesize authorizationStatus;
 @synthesize authorizationSpinner;
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	self.lastFmUsername.text = [Settings sharedInstance].lastFmUsername;
+	self.lastFmPassword.text = [Settings sharedInstance].lastFmPassword;
+	self.autocorrectionSwitch.on = [Settings sharedInstance].lastFmIsAutocorrecting;
+	[self auth];
+	
+	self.versionString.text = [@"Version " stringByAppendingString:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
+	self.buildString.text = [@"Build " stringByAppendingString:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
+}
+
+- (IBAction)fieldEdited:(UITextField *)sender {
+	[sender resignFirstResponder];
+	if(sender == self.lastFmUsername && !self.lastFmPassword.text.length) {
+		[self.lastFmPassword becomeFirstResponder];
+	}
+	[Settings sharedInstance].lastFmUsername = self.lastFmUsername.text;
+	[Settings sharedInstance].lastFmPassword = self.lastFmPassword.text;
+	[self auth];
+}
+
+- (IBAction)autocorrectionSwitched:(UISwitch *)sender {
+	[Settings sharedInstance].lastFmIsAutocorrecting = sender.on;
+}
 
 - (void)auth {
 	if([Settings sharedInstance].lastFmUsername.length && [Settings sharedInstance].lastFmPassword.length) {
@@ -51,27 +82,6 @@
 	}
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	self.lastFmUsername.text = [Settings sharedInstance].lastFmUsername;
-	self.lastFmPassword.text = [Settings sharedInstance].lastFmPassword;
-	[self auth];
-	
-	self.versionString.text = [@"Version " stringByAppendingString:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
-	self.buildString.text = [@"Build " stringByAppendingString:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
-}
-
-- (IBAction)fieldEdited:(UITextField *)sender {
-	[sender resignFirstResponder];
-	if(sender == self.lastFmUsername && !self.lastFmPassword.text.length) {
-		[self.lastFmPassword becomeFirstResponder];
-	}
-	[Settings sharedInstance].lastFmUsername = self.lastFmUsername.text;
-	[Settings sharedInstance].lastFmPassword = self.lastFmPassword.text;
-	[self auth];
-}
-
 - (void)viewDidUnload
 {
 	[self setVersionString:nil];
@@ -80,6 +90,7 @@
 	[self setLastFmPassword:nil];
 	[self setAuthorizationStatus:nil];
 	[self setAuthorizationSpinner:nil];
+	[self setAutocorrectionSwitch:nil];
     [super viewDidUnload];
 }
 
