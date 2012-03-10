@@ -33,11 +33,17 @@
 @implementation LastFmAPI
 
 - (void)getInfoForTrack:(NSString*)track artist:(NSString*)artist
+	  completionHandler:(void (^)(NSDictionary *trackInfo, NSError *error))handler {
+	[self getInfoForTrack:track artist:artist autocorrection:NO completionHandler:handler];
+}
+
+- (void)getInfoForTrack:(NSString*)track artist:(NSString*)artist autocorrection:(BOOL)autocorrection
            completionHandler:(void (^)(NSDictionary *trackInfo, NSError *error))handler {
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
                                 track, @"track",
-                                artist, @"artist", nil];
+                                artist, @"artist",
+								((autocorrection) ? @"1" : @"0"), @"autocorrect", nil];
     [self callMethod:@"track.getInfo"
       withParameters:parameters 
          requireAuth:NO
@@ -157,11 +163,13 @@
 		NSError *error = nil;
 		NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:NULL error:&error];
         NSDictionary *response = nil;
-        if(data) {
-            response = [self dictionaryWithJsonString:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
-            if (!error) {
-                error = [self errorWithDictionary:response];
-            }
+		if(error) {
+			error = [self errorWithDictionary:response];
+		}
+		if(data) {
+			NSString *jsonString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            response = [self dictionaryWithJsonString:jsonString];
+			jsonString = nil;
         }
 		dispatch_async(dispatch_get_main_queue(), ^{
 			if(handler)
@@ -186,8 +194,10 @@
 	NSMutableString *requestURL = [NSMutableString stringWithFormat:@"%@?", API_ROOT];
 	NSArray *keys = [parameters allKeys];
 	for(NSString *key in keys) {
-		[requestURL appendFormat:@"%@=%@&", key, [[[parameters valueForKey:key] description]
-                                                  stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
+		NSString *parameterString = [[parameters valueForKey:key] description];
+		parameterString = [parameterString stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+		parameterString = [parameterString stringByReplacingOccurrencesOfString:@"&" withString:@"%26"];
+		[requestURL appendFormat:@"%@=%@&", key, parameterString];
 	}
     [requestURL deleteCharactersInRange:NSMakeRange([requestURL length] - 1, 1)];
 	return requestURL;
@@ -197,8 +207,10 @@
     NSMutableString *requestURL = [NSMutableString string];
 	NSArray *keys = [parameters allKeys];
 	for(NSString *key in keys) {
-		[requestURL appendFormat:@"%@=%@&", key, [[[parameters valueForKey:key] description] 
-                                                  stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
+		NSString *parameterString = [[parameters valueForKey:key] description];
+		parameterString = [parameterString stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+		parameterString = [parameterString stringByReplacingOccurrencesOfString:@"&" withString:@"%26"];
+		[requestURL appendFormat:@"%@=%@&", key, parameterString];
 	}
     [requestURL deleteCharactersInRange:NSMakeRange([requestURL length] - 1, 1)];
     return [requestURL dataUsingEncoding:NSUTF8StringEncoding];

@@ -51,4 +51,8 @@
     }
 }
 
+- (NSString *)description {
+	return [NSString stringWithFormat:@"Artist: '%@' Track: '%@'", self.artist, self.trackName];
+}
+
 @end

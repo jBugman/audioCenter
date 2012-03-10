@@ -19,6 +19,9 @@
 - (void)getInfoForTrack:(NSString*)track artist:(NSString*)artist
            completionHandler:(void (^)(NSDictionary *trackInfo, NSError *error))handler;
 
+- (void)getInfoForTrack:(NSString*)track artist:(NSString*)artist autocorrection:(BOOL)autocorrection
+	  completionHandler:(void (^)(NSDictionary *trackInfo, NSError *error))handler;
+
 - (void)getInfoForArtist:(NSString*)artist completionHandler:(void (^)(NSDictionary *artistInfo, NSError *error))handler;
 
 - (void)updateNowPlayingTrack:(NSString*)track artist:(NSString*)artist sessionKey:(NSString*)sessionKey
