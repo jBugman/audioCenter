@@ -11,6 +11,7 @@
 #define LASTFM_USERNAME_KEY @"lastFmUsername"
 #define LASTFM_PASSWORD_KEY @"lastFmPassword"
 #define LASTFM_AUTOCORRECT_KEY @"lastFmAutocorrect"
+#define LASTFM_SCROBBLING_KEY @"lastFmScrobbling"
 
 @implementation Settings
 
@@ -37,12 +38,21 @@ static Settings *singleton = nil;
 	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (BOOL)lastFmIsAutocorrecting {
+- (BOOL)lastFmAutocorrect {
 	return [[NSUserDefaults standardUserDefaults] boolForKey:LASTFM_AUTOCORRECT_KEY];
 }
 
-- (void)setLastFmIsAutocorrecting:(BOOL)lastFmIsAutocorrecting {
+- (void)setLastFmAutocorrect:(BOOL)lastFmIsAutocorrecting {
 	[[NSUserDefaults standardUserDefaults] setBool:lastFmIsAutocorrecting forKey:LASTFM_AUTOCORRECT_KEY];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (BOOL)lastFmScrobbling {
+	return [[NSUserDefaults standardUserDefaults] boolForKey:LASTFM_SCROBBLING_KEY];
+}
+
+- (void)setLastFmScrobbling:(BOOL)lastFmScrobbling {
+	[[NSUserDefaults standardUserDefaults] setBool:lastFmScrobbling forKey:LASTFM_SCROBBLING_KEY];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 

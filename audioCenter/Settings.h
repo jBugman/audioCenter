@@ -12,7 +12,8 @@
 
 @property (strong, nonatomic) NSString *lastFmUsername;
 @property (strong, nonatomic) NSString *lastFmPassword;
-@property (assign, nonatomic) BOOL lastFmIsAutocorrecting;
+@property (assign, nonatomic) BOOL lastFmAutocorrect;
+@property (assign, nonatomic) BOOL lastFmScrobbling;
 
 + (Settings*)sharedInstance;
 

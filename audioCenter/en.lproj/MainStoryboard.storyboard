@@ -298,7 +298,7 @@
                                         </view>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Ac5-cm-tev">
-                                        <rect key="frame" x="0.0" y="179" width="320" height="45"/>
+                                        <rect key="frame" x="0.0" y="179" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="0.0" width="300" height="43"/>
@@ -322,12 +322,38 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="gkl-nP-k9i">
+                                        <rect key="frame" x="0.0" y="223" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Scrobbling" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="CVy-Nn-fjp">
+                                                    <rect key="frame" x="10" y="11" width="173" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="4v2-lh-UML">
+                                                    <rect key="frame" x="211" y="8" width="79" height="27"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="onTintColor" red="0.88627457618713379" green="0.074509806931018829" blue="0.011764707043766975" alpha="1" colorSpace="deviceRGB"/>
+                                                    <connections>
+                                                        <action selector="scrobblingSwitched:" destination="Udz-Cl-jfV" eventType="valueChanged" id="Zym-tI-iXk"/>
+                                                    </connections>
+                                                </switch>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="Info" id="fe2-la-iXQ">
                                 <cells>
                                     <tableViewCell userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="igq-QC-R4s">
-                                        <rect key="frame" x="0.0" y="270" width="320" height="46"/>
+                                        <rect key="frame" x="0.0" y="314" width="320" height="46"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="1" width="300" height="43"/>
@@ -367,6 +393,7 @@
                         <outlet property="buildString" destination="tGy-gs-oMe" id="sOF-7s-dgb"/>
                         <outlet property="lastFmPassword" destination="2HU-pb-icQ" id="Lpr-KP-OTy"/>
                         <outlet property="lastFmUsername" destination="E2S-yw-JSw" id="anE-lf-EN2"/>
+                        <outlet property="scrobblingSwitch" destination="4v2-lh-UML" id="lTE-wT-dRP"/>
                         <outlet property="versionString" destination="GSA-c2-ckW" id="NyS-6y-y7q"/>
                     </connections>
                 </tableViewController>
@@ -409,6 +436,7 @@
                 <relationship kind="outlet" name="buildString" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="lastFmPassword" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="lastFmUsername" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="scrobblingSwitch" candidateClass="UISwitch"/>
                 <relationship kind="outlet" name="versionString" candidateClass="UILabel"/>
             </relationships>
         </class>

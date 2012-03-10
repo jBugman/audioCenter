@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *lastFmUsername;
 @property (weak, nonatomic) IBOutlet UITextField *lastFmPassword;
 @property (weak, nonatomic) IBOutlet UISwitch *autocorrectionSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *scrobblingSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *authorizationStatus;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *authorizationSpinner;
 
@@ -30,6 +31,7 @@
 @synthesize lastFmUsername;
 @synthesize lastFmPassword;
 @synthesize autocorrectionSwitch;
+@synthesize scrobblingSwitch;
 @synthesize authorizationStatus;
 @synthesize authorizationSpinner;
 
@@ -38,7 +40,8 @@
     [super viewDidLoad];
 	self.lastFmUsername.text = [Settings sharedInstance].lastFmUsername;
 	self.lastFmPassword.text = [Settings sharedInstance].lastFmPassword;
-	self.autocorrectionSwitch.on = [Settings sharedInstance].lastFmIsAutocorrecting;
+	self.autocorrectionSwitch.on = [Settings sharedInstance].lastFmAutocorrect;
+	self.scrobblingSwitch.on = [Settings sharedInstance].lastFmScrobbling;
 	[self auth];
 	
 	self.versionString.text = [@"Version " stringByAppendingString:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
@@ -56,7 +59,11 @@
 }
 
 - (IBAction)autocorrectionSwitched:(UISwitch *)sender {
-	[Settings sharedInstance].lastFmIsAutocorrecting = sender.on;
+	[Settings sharedInstance].lastFmAutocorrect = sender.on;
+}
+
+- (IBAction)scrobblingSwitched:(UISwitch *)sender {
+	[Settings sharedInstance].lastFmScrobbling = sender.on;
 }
 
 - (void)auth {
@@ -91,6 +98,7 @@
 	[self setAuthorizationStatus:nil];
 	[self setAuthorizationSpinner:nil];
 	[self setAutocorrectionSwitch:nil];
+	[self setScrobblingSwitch:nil];
     [super viewDidUnload];
 }
 

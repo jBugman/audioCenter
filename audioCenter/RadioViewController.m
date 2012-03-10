@@ -191,29 +191,31 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	[self.activityIndicator startAnimating];
 
 	NSLog(@"Raw track info:\n%@", normalizedTitle);
-	if(self.previousTrack != nil && ![normalizedTitle isEqualToTitle:self.previousTrack]) {
-		NSTimeInterval deltaT = [[NSDate date] timeIntervalSince1970] - self.previousTrackStartTime;
-		if((self.previousTrackLength > 0 && deltaT > self.previousTrackLength / 2) || deltaT > 240) { //Cкробблинг с 50% или 4 минут
-			if(self.sessionKey) {
-				[self.api scrobbleTrack:self.previousTrack.trackName artist:self.previousTrack.artist
-							  timestamp:[[NSDate date] timeIntervalSince1970]
-							 sessionKey:self.sessionKey completionHandler:^(NSError *error) {
-								 NSLog(@"scrobbleTrack: %@", error);
-								 if(error && error.code == -1009) {
-									 self.scrobblingStatus.alpha = 0.2f;
-								 }
-							 }];
+	if([Settings sharedInstance].lastFmScrobbling) {
+		if(self.previousTrack != nil && ![normalizedTitle isEqualToTitle:self.previousTrack]) {
+			NSTimeInterval deltaT = [[NSDate date] timeIntervalSince1970] - self.previousTrackStartTime;
+			if((self.previousTrackLength > 0 && deltaT > self.previousTrackLength / 2) || deltaT > 240) { //Cкробблинг с 50% или 4 минут
+				if(self.sessionKey) {
+					[self.api scrobbleTrack:self.previousTrack.trackName artist:self.previousTrack.artist
+								  timestamp:[[NSDate date] timeIntervalSince1970]
+								 sessionKey:self.sessionKey completionHandler:^(NSError *error) {
+									 NSLog(@"scrobbleTrack: %@", error);
+									 if(error && error.code == -1009) {
+										 self.scrobblingStatus.alpha = 0.2f;
+									 }
+								 }];
+				}
 			}
 		}
 	}
 	self.previousTrack = normalizedTitle;
 	self.previousTrackStartTime = [[NSDate date] timeIntervalSince1970];
 	
-	[self.api getInfoForTrack:normalizedTitle.trackName artist:normalizedTitle.artist autocorrection:[Settings sharedInstance].lastFmIsAutocorrecting completionHandler:^(NSDictionary *trackInfo, NSError *error) {
+	[self.api getInfoForTrack:normalizedTitle.trackName artist:normalizedTitle.artist autocorrection:[Settings sharedInstance].lastFmAutocorrect completionHandler:^(NSDictionary *trackInfo, NSError *error) {
 		if(error) {
 			NSLog(@"getInfoForTrack: %@", error);
 		} else {
-			if([Settings sharedInstance].lastFmIsAutocorrecting) {
+			if([Settings sharedInstance].lastFmAutocorrect) {
 				normalizedTitle.trackName = [trackInfo valueForKey:@"name"];
 				normalizedTitle.artist = [trackInfo valueForKeyPath:@"artist.name"];
 				self.trackArtist.text = normalizedTitle.artist;
