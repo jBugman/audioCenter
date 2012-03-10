@@ -352,8 +352,8 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="Info" id="fe2-la-iXQ">
                                 <cells>
-                                    <tableViewCell userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="igq-QC-R4s">
-                                        <rect key="frame" x="0.0" y="314" width="320" height="46"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="igq-QC-R4s">
+                                        <rect key="frame" x="0.0" y="314" width="320" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="1" width="300" height="43"/>
@@ -377,6 +377,31 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="sQg-1E-hCc" detailTextLabel="Mbs-do-hus" style="IBUITableViewCellStyleValue1" id="uww-Qy-i0M">
+                                        <rect key="frame" x="0.0" y="359" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Cache size" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="sQg-1E-hCc">
+                                                    <rect key="frame" x="10" y="11" width="88" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Mbs-do-hus">
+                                                    <rect key="frame" x="280" y="11" width="10" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.2196078431372549" green="0.32941176470588235" blue="0.52941176470588236" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -391,6 +416,7 @@
                         <outlet property="authorizationStatus" destination="Fcp-9r-wtR" id="r6N-kF-scm"/>
                         <outlet property="autocorrectionSwitch" destination="vVy-rQ-B34" id="Mar-5x-ZTi"/>
                         <outlet property="buildString" destination="tGy-gs-oMe" id="sOF-7s-dgb"/>
+                        <outlet property="cacheSize" destination="Mbs-do-hus" id="ymq-Tp-R2q"/>
                         <outlet property="lastFmPassword" destination="2HU-pb-icQ" id="Lpr-KP-OTy"/>
                         <outlet property="lastFmUsername" destination="E2S-yw-JSw" id="anE-lf-EN2"/>
                         <outlet property="scrobblingSwitch" destination="4v2-lh-UML" id="lTE-wT-dRP"/>
@@ -434,6 +460,7 @@
                 <relationship kind="outlet" name="authorizationStatus" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="autocorrectionSwitch" candidateClass="UISwitch"/>
                 <relationship kind="outlet" name="buildString" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="cacheSize" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="lastFmPassword" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="lastFmUsername" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="scrobblingSwitch" candidateClass="UISwitch"/>

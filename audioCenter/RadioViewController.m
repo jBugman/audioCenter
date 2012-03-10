@@ -56,7 +56,6 @@
 @property (assign, nonatomic) NSTimeInterval previousTrackLength;
 
 - (void)loadImageWithUrl:(NSString*)imageUrl;
-- (void)processCache;
 - (void)updateTrackInfo:(NSArray*)metadata;
 
 void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, 
@@ -129,18 +128,6 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 		}
 		return _radio;
 	}
-}
-
-- (void)processCache {
-	NSString *cachesPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-	NSArray *files = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:cachesPath error:nil] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.jpg'"]];
-	long totalSize = 0;
-	for(NSString* fileName in files) {
-		NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[cachesPath stringByAppendingPathComponent:fileName] error:nil];
-		totalSize += [((NSNumber*)[attributes valueForKey:NSFileSize]) longValue];
-	}
-	totalSize /= 1024;
-	NSLog(@"[i] Cache size: %@K", [NSNumber numberWithLong:totalSize]);
 }
 
 - (void)setRadiostation:(NSString*)stationUrl {	
@@ -412,8 +399,6 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	
 	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
-	
-	[self processCache];
 }
 
 - (void)viewDidUnload {

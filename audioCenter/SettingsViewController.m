@@ -13,6 +13,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *versionString;
 @property (weak, nonatomic) IBOutlet UILabel *buildString;
+@property (weak, nonatomic) IBOutlet UILabel *cacheSize;
 
 @property (weak, nonatomic) IBOutlet UITextField *lastFmUsername;
 @property (weak, nonatomic) IBOutlet UITextField *lastFmPassword;
@@ -22,12 +23,14 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *authorizationSpinner;
 
 - (void)auth;
+- (void)processCache;
 
 @end
 
 @implementation SettingsViewController
 @synthesize versionString;
 @synthesize buildString;
+@synthesize cacheSize;
 @synthesize lastFmUsername;
 @synthesize lastFmPassword;
 @synthesize autocorrectionSwitch;
@@ -42,6 +45,7 @@
 	self.lastFmPassword.text = [Settings sharedInstance].lastFmPassword;
 	self.autocorrectionSwitch.on = [Settings sharedInstance].lastFmAutocorrect;
 	self.scrobblingSwitch.on = [Settings sharedInstance].lastFmScrobbling;
+	[self processCache];
 	[self auth];
 	
 	self.versionString.text = [@"Version " stringByAppendingString:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
@@ -89,6 +93,24 @@
 	}
 }
 
+- (void)processCache {
+	dispatch_queue_t queue = dispatch_queue_create("settings", NULL);
+	dispatch_async(queue, ^{
+		NSString *cachesPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+		NSArray *files = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:cachesPath error:nil] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.jpg'"]];
+		long totalSize = 0;
+		for(NSString* fileName in files) {
+			NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[cachesPath stringByAppendingPathComponent:fileName] error:nil];
+			totalSize += [((NSNumber*)[attributes valueForKey:NSFileSize]) longValue];
+		}
+		totalSize /= 1024;
+		dispatch_async(dispatch_get_main_queue(), ^{
+			self.cacheSize.text = (totalSize) ? [NSString stringWithFormat:@"%@K", [NSNumber numberWithLong:totalSize]] : @"0";
+		});
+	});
+	dispatch_release(queue);
+}
+
 - (void)viewDidUnload
 {
 	[self setVersionString:nil];
@@ -99,6 +121,7 @@
 	[self setAuthorizationSpinner:nil];
 	[self setAutocorrectionSwitch:nil];
 	[self setScrobblingSwitch:nil];
+	[self setCacheSize:nil];
     [super viewDidUnload];
 }
 
