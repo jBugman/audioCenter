@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Sergey Parshukov. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 #define API_KEY     @"be88788cee404ccecdcd647beea93a01"
 #define API_SECRET  @"f2fc974d4d738461b9832e4d1a62ac46"

@@ -195,7 +195,7 @@
 	NSArray *keys = [parameters allKeys];
 	for(NSString *key in keys) {
 		NSString *parameterString = [[parameters valueForKey:key] description];
-		parameterString = [parameterString stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+		parameterString = [parameterString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 		parameterString = [parameterString stringByReplacingOccurrencesOfString:@"&" withString:@"%26"];
 		[requestURL appendFormat:@"%@=%@&", key, parameterString];
 	}
@@ -208,7 +208,7 @@
 	NSArray *keys = [parameters allKeys];
 	for(NSString *key in keys) {
 		NSString *parameterString = [[parameters valueForKey:key] description];
-		parameterString = [parameterString stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+		parameterString = [parameterString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 		parameterString = [parameterString stringByReplacingOccurrencesOfString:@"&" withString:@"%26"];
 		[requestURL appendFormat:@"%@=%@&", key, parameterString];
 	}
