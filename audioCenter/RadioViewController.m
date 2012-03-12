@@ -205,10 +205,12 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 			if([Settings sharedInstance].lastFmAutocorrect) {
 				normalizedTitle.trackName = [trackInfo valueForKey:@"name"];
 				normalizedTitle.artist = [trackInfo valueForKeyPath:@"artist.name"];
-				self.trackArtist.text = normalizedTitle.artist;
-				self.trackTitle.text = normalizedTitle.trackName;
-				self.previousTrack.artist = normalizedTitle.artist;
-				self.previousTrack.trackName = normalizedTitle.trackName;
+				if(normalizedTitle.isFilled) {
+					self.trackArtist.text = normalizedTitle.artist;
+					self.trackTitle.text = normalizedTitle.trackName;
+					self.previousTrack.artist = normalizedTitle.artist;
+					self.previousTrack.trackName = normalizedTitle.trackName;
+				}
 				NSLog(@"Autocorrected:\n%@", normalizedTitle);
 			}
 			NSString *albumImageUrl = [[[trackInfo valueForKeyPath:@"album.image"] lastObject] valueForKey:@"#text"];
