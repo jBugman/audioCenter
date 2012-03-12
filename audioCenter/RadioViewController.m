@@ -165,6 +165,13 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 			break;
 		}
 	}
+	NSData *binary = [metadataTitle dataUsingEncoding:NSISOLatin1StringEncoding];
+	if(binary) {
+		NSString *decoded = [[NSString alloc] initWithData:binary encoding:NSWindowsCP1251StringEncoding];
+		if(decoded) {
+			metadataTitle = decoded;
+		}
+	}
 	NormalizedTrackTitle *normalizedTitle = [NormalizedTrackTitle normalizedTrackTitleWithString:metadataTitle];
 	if(!normalizedTitle.isFilled) {
 		[self.titleActivityIndicator stopAnimating];

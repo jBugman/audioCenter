@@ -29,7 +29,8 @@
 						 @"http://ultradarkradio.com:3026/",
 						 @"http://87.118.78.20:2700/",
 						 @"http://205.188.215.231:8000/",
-						 @"http://93.81.248.234:8000/", nil];
+						 @"http://93.81.248.234:8000/",
+						 @"http://mp3.nashe.ru/nashe-192.m3u", nil];
 	}
 	return _stationsList;
 }

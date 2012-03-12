@@ -2,7 +2,7 @@
 //  main.m
 //  audioCenter
 //
-//  Created by Сергей Паршуков on 24.02.2012.
+//  Created by Sergey Parshukov on 24.02.2012.
 //  Copyright (c) 2012 Sergey Parshukov. All rights reserved.
 //
 
