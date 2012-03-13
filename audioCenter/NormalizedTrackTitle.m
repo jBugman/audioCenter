@@ -22,7 +22,7 @@
 }
 
 - (BOOL)isFilled {
-	return (![self.artist isEqualToString:@"Unknown Artist"] && ![self.trackName isEqualToString:@"Unknown Track"]);
+	return self.artist.length && self.trackName.length && (![self.artist isEqualToString:@"Unknown Artist"] && ![self.trackName isEqualToString:@"Unknown Track"]);
 }
 
 - (BOOL)isEqualToTitle:(NormalizedTrackTitle*)otherTitle {
