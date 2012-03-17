@@ -117,14 +117,27 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	self.stationTitle.text = @"";
 }
 
+- (AVAsset*)asset {
+	AVAsset *asset = [AVAsset assetWithURL:self.radioUrl];
+	if(!asset.playable) {
+		return nil;
+	} else {
+		return asset;
+	}
+}
+
 - (AVPlayer *)radio {
 	if(!self.radioUrl) {
 		return nil;
 	} else {
 		if(!_radio) {
-			_radio = [[AVPlayer alloc] initWithURL: self.radioUrl];
-			[_radio.currentItem addObserver:self forKeyPath:TIMED_METADATA options:NSKeyValueObservingOptionNew context:NULL];
-			[_radio addObserver:self forKeyPath:RATE options:NSKeyValueObservingOptionNew context:NULL];
+			AVAsset *asset = self.asset;
+			if(asset){
+				AVPlayerItem *playerItem = [AVPlayerItem playerItemWithAsset:asset];
+				_radio = [[AVPlayer alloc] initWithPlayerItem:playerItem];
+				[_radio.currentItem addObserver:self forKeyPath:TIMED_METADATA options:NSKeyValueObservingOptionNew context:NULL];
+				[_radio addObserver:self forKeyPath:RATE options:NSKeyValueObservingOptionNew context:NULL];
+			}
 		}
 		return _radio;
 	}
@@ -301,23 +314,33 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 }
 
 - (void)play {
-	[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
-	[[AVAudioSession sharedInstance] setDelegate:self];
-    [[AVAudioSession sharedInstance] setActive:YES error:nil];
-	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, (__bridge void*)self);
+	if(self.asset) {
+		[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+		[[AVAudioSession sharedInstance] setDelegate:self];
+		[[AVAudioSession sharedInstance] setActive:YES error:nil];
+		AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, (__bridge void*)self);
 
-	if(!self.radio.currentItem.timedMetadata) {
-		[self.titleActivityIndicator startAnimating];
+		if(!self.radio.currentItem.timedMetadata) {
+			[self.titleActivityIndicator startAnimating];
+		}
+		
+		[RadiostationMetadata getStationTitleWithUrl:self.radioUrl completionHandler:^(NSString *title) {
+			self.stationTitle.text = title;
+		}];
+		
+		[self.radio play];
+		[self.playPauseButton setImage:[UIImage imageNamed:@"pauseIcon.png"] forState:UIControlStateNormal];
+		self.isPlaying = YES;
+		self.wasInterrupted = NO;
+	} else {
+		NSLog(@"Broken asset");
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Can’t play this URL" message:@"Possibly it’s broken or stream is down" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		[alert show];
 	}
-	
-	[RadiostationMetadata getStationTitleWithUrl:self.radioUrl completionHandler:^(NSString *title) {
-		self.stationTitle.text = title;
-	}];
-	
-	[self.radio play];
-	[self.playPauseButton setImage:[UIImage imageNamed:@"pauseIcon.png"] forState:UIControlStateNormal];
-	self.isPlaying = YES;
-	self.wasInterrupted = NO;
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+	[self performSegueWithIdentifier:@"ShowRadiostations" sender:self];
 }
 
 - (IBAction)playPauseTap:(UIButton*)sender {
