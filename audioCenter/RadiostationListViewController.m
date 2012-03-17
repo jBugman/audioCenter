@@ -35,7 +35,8 @@
 	return _stationsList;
 }
 
-- (void)selectRadiostation:(NSString*)url {
+- (void)selectRadiostation:(NSString*)urlString {
+	NSURL *url = [NSURL URLWithString:urlString];
 	[self.delegate setRadiostation:url];
 	if([self.delegate respondsToSelector:@selector(play)]) {
 		[self.delegate play];

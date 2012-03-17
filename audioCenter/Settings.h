@@ -15,6 +15,8 @@
 @property (assign, nonatomic) BOOL lastFmAutocorrect;
 @property (assign, nonatomic) BOOL lastFmScrobbling;
 
+@property (strong, nonatomic) NSURL *lastStation;
+
 + (Settings*)sharedInstance;
 
 @end

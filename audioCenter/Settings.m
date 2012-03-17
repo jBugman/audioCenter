@@ -12,6 +12,7 @@
 #define LASTFM_PASSWORD_KEY @"lastFmPassword"
 #define LASTFM_AUTOCORRECT_KEY @"lastFmAutocorrect"
 #define LASTFM_SCROBBLING_KEY @"lastFmScrobbling"
+#define LAST_STATION @"lastStation"
 
 @implementation Settings
 
@@ -22,7 +23,7 @@ static Settings *singleton = nil;
 	return value;
 }
 
-- (void)setLastFmUsername:(NSString *)lastFmUsername {
+- (void)setLastFmUsername:(NSString*)lastFmUsername {
 	[[NSUserDefaults standardUserDefaults] setValue:lastFmUsername forKey:LASTFM_USERNAME_KEY];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -33,7 +34,7 @@ static Settings *singleton = nil;
 	return value;
 }
 
-- (void)setLastFmPassword:(NSString *)lastFmPassword {
+- (void)setLastFmPassword:(NSString*)lastFmPassword {
 	[[NSUserDefaults standardUserDefaults] setValue:lastFmPassword forKey:LASTFM_PASSWORD_KEY];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -53,6 +54,16 @@ static Settings *singleton = nil;
 
 - (void)setLastFmScrobbling:(BOOL)lastFmScrobbling {
 	[[NSUserDefaults standardUserDefaults] setBool:lastFmScrobbling forKey:LASTFM_SCROBBLING_KEY];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (NSURL*)lastStation {
+	NSString *value = [[NSUserDefaults standardUserDefaults] stringForKey:LAST_STATION];
+	return [NSURL URLWithString:value];
+}
+
+- (void)setLastStation:(NSURL*)lastStation {
+	[[NSUserDefaults standardUserDefaults] setValue:[lastStation description] forKey:LAST_STATION];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 

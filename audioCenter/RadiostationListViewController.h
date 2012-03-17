@@ -10,7 +10,7 @@
 
 @protocol RadiostationListDelegate <NSObject>
 
-- (void)setRadiostation:(NSString*)stationUrl;
+- (void)setRadiostation:(NSURL*)stationUrl;
 
 @optional
 - (void) play;

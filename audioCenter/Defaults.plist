@@ -6,5 +6,7 @@
 	<true/>
 	<key>lastFmScrobbling</key>
 	<true/>
+	<key>lastStation</key>
+	<string>http://87.118.78.20:2700/</string>
 </dict>
 </plist>

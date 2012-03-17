@@ -24,9 +24,6 @@
 
 #define IMAGE_SIZE 320.0f
 
-#define DEFAULT_RADIO_URL @"http://87.118.78.20:2700/"
-
-
 @interface RadioViewController() <RadiostationListDelegate, AVAudioSessionDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *trackArtist;
@@ -102,8 +99,13 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	}
 }
 
+- (void)setRadiostation:(NSURL*)stationUrl {	
+	self.radioUrl = stationUrl;
+}
+
 - (void)setRadioUrl:(NSURL *)radioUrl {
 	_radioUrl = radioUrl;
+	[Settings sharedInstance].lastStation = radioUrl;
 	[self.radio pause];
 	[self.radio.currentItem removeObserver:self forKeyPath:TIMED_METADATA];
 	[self.radio removeObserver:self forKeyPath:RATE];
@@ -141,10 +143,6 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 		}
 		return _radio;
 	}
-}
-
-- (void)setRadiostation:(NSString*)stationUrl {	
-	self.radioUrl = [NSURL URLWithString:stationUrl];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -427,7 +425,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
     [super viewDidLoad];
     
     self.api = [[LastFmAPI alloc] init];
-	[self setRadiostation:DEFAULT_RADIO_URL];
+	self.radioUrl = [Settings sharedInstance].lastStation;
 	
 	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
